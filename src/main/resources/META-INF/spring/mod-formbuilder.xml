@@ -31,5 +31,20 @@
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.RedirectAction">
         <property name="name" value="redirect"/>
+    </bean>    
+    <bean class="org.jahia.modules.formbuilder.actions.DeleteIdeaAction">
+        <property name="name" value="deleteidea"/>
+    </bean>
+    <bean class="org.jahia.modules.formbuilder.actions.CreateIdeaAction">
+        <property name="name" value="createidea"/>
+    </bean>
+    <bean class="org.jahia.modules.formbuilder.actions.ModifyIdeaAction">
+        <property name="name" value="modifyidea"/>
+    </bean>
+    <bean class="org.jahia.modules.formbuilder.actions.ModifyChallengeAction">
+        <property name="name" value="modifychallenge"/>
+    </bean>
+    <bean class="org.jahia.modules.formbuilder.actions.CreateChallengeAction">
+        <property name="name" value="createchallenge"/>
     </bean>
 </beans>

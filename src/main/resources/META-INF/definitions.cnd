@@ -66,6 +66,21 @@ orderable
 [jnt:redirectFormAction] > jnt:formAction
  - j:action (string) = 'redirect' autocreated hidden indexed=no
  - node (weakreference,picker[type='editoriallink']) mandatory indexed=no
+  
+[jnt:deleteIdeaAction] > jnt:formAction
+ - j:action (string) = 'deleteidea' autocreated hidden indexed=no 
+  
+[jnt:createIdeaAction] > jnt:formAction
+ - j:action (string) = 'createidea' autocreated hidden indexed=no 
+  
+[jnt:createChallengeAction] > jnt:formAction
+ - j:action (string) = 'createchallenge' autocreated hidden indexed=no
+  
+[jnt:modifyIdeaAction] > jnt:formAction
+ - j:action (string) = 'modifyidea' autocreated hidden indexed=no 
+  
+[jnt:modifyChallengeAction] > jnt:formAction
+ - j:action (string) = 'modifychallenge' autocreated hidden indexed=no 
 
 [jnt:actionList] > jnt:content, jmix:list
  orderable
