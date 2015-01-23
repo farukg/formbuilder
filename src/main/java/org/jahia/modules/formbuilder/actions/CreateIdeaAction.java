@@ -97,20 +97,22 @@ public class CreateIdeaAction extends Action {
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
       
       List<String> listTitle = parameters.get("title");
-      List<String> listDescr = parameters.get("description");
+      //List<String> listDescr = parameters.get("description");
+      List<String> listyoutube = parameters.get("link-to-video");
       //List<String> listImage = parameters.get("end-image");
-      
-      JCRNodeWrapper nodeSession = session.getNode("/sites/mySite/contents/electrodea/idea");      
+            
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");      
       JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
       
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));
-      jcrNodeWrapper.setProperty("body", listDescr.get(0));
+      jcrNodeWrapper.setProperty("jcr:desc", "argh");
       //jcrNodeWrapper.setProperty("image", listImage.get(0));
-      //jcrNodeWrapper.setProperty("video", "dtnNO5_Ao6U"); // TODO: dynamically fetch YouTube-ID
+      jcrNodeWrapper.setProperty("video", listyoutube.get(0)); // TODO: dynamically fetch YouTube-ID
+      //jcrNodeWrapper.setProperty("video", "zzzzzzz");
       
       session.save();
             
-      String targetPath = "/sites/mySite/home";
+      String targetPath = "/sites/electrodea/contents/ideas";
       
       return new ActionResult(HttpServletResponse.SC_OK);        
     }

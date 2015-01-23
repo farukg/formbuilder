@@ -98,13 +98,15 @@ public class CreateChallengeAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
       List<String> listTitle = parameters.get("title");
-      List<String> listDescr = parameters.get("description");
+      List<String> listDescr = parameters.get("describe-your-challenge");
+      //List<String> listCompl = parameters.get("status");
       
-      JCRNodeWrapper nodeSession = session.getNode("/sites/mySite/contents/electrodea/challenge");
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
       JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge");
       
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
       jcrNodeWrapper.setProperty("body", listDescr.get(0));
+      //jcrNodeWrapper.setProperty("completed", listCompl.get(0));
       
       //username test
       //String username = nodeSession.getUser().getUsername());
