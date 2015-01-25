@@ -99,7 +99,7 @@ public class CreateChallengeAction extends Action {
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
       List<String> listTitle = parameters.get("title");
       List<String> listDescr = parameters.get("describe-your-challenge");
-      List<String> listCompl = parameters.get("status");
+      List<String> listCompl = parameters.get("status"); 
       List<String> listVisibil = parameters.get("visibility");
       
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
