@@ -1,124 +1,124 @@
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
 
-[jnt:formElementValidation] > jnt:content abstract
-orderable
+[jnt:formElementValidation] > jnt:content orderable abstract
 
-[jnt:formListElement] > jnt:content,mix:title
-orderable
+[jnt:formListElement] > jnt:content, mix:title orderable
 
-[jnt:formElement] > jnt:content,mix:title abstract
-orderable
-+ * (jnt:formElementValidation)
+[jnt:formElement] > jnt:content, mix:title orderable abstract
+ + * (jnt:formElementValidation)
 
-[jnt:formButton] > jnt:content,mix:title abstract
- orderable
+[jnt:formButton] > jnt:content, mix:title orderable abstract
 
-[jnt:responseToForm] > jnt:content,nt:unstructured
+[jnt:responseToForm] > nt:unstructured, jnt:content orderable
 
-[jnt:inputText] > jnt:formElement
- - size (long) = 20 autocreated
- - maxLength (long) = 30 autocreated
+[jnt:inputText] > jnt:formElement orderable
+ - size (long) = '20' autocreated
+ - maxLength (long) = '30' autocreated
  - defaultValue (string) indexed=no
  - mask (string) indexed=no
 
-[jnt:dateField] > jnt:formElement
+[jnt:dateField] > jnt:formElement orderable
 
-[jnt:inputMultiline] > jnt:formElement
- - cols (long) = 20 autocreated
- - rows (long) = 6 autocreated
+[jnt:inputMultiline] > jnt:formElement orderable
+ - cols (long) = '20' autocreated
+ - rows (long) = '6' autocreated
  - defaultValue (string) indexed=no
 
-[jnt:passwordField] > jnt:formElement
+[jnt:passwordField] > jnt:formElement orderable
 
-[jnt:fieldset] > jnt:content, mix:title
- orderable
+[jnt:fieldset] > jnt:content, mix:title orderable
  + * (jnt:formElement)
 
-[jnt:checkboxField] > jnt:formElement
+[jnt:checkboxField] > jnt:formElement orderable
  + * (jnt:formListElement)
 
-[jnt:selectField] > jnt:formElement
+[jnt:selectField] > jnt:formElement orderable
  + * (jnt:formListElement)
 
-[jnt:radiobuttonField] > jnt:formElement
- + * (jnt:formListElement)
+[jnt:submitButton] > jnt:formButton orderable
 
-[jnt:submitButton] > jnt:formButton
+[jnt:resetButton] > jnt:formButton orderable
 
-[jnt:resetButton] > jnt:formButton
+[jnt:birthdate] > jnt:formElement orderable
 
-[jnt:birthdate] > jnt:formElement
+[jnt:addressBlock] > jnt:formElement orderable
 
-[jnt:addressBlock] > jnt:formElement
-
-[jnt:automaticList] > jnt:formElement
+[jnt:automaticList] > jnt:formElement orderable
  - type (string, choicelist[choicelisttypes]) indexed=no
 
 [jnt:formAction] > jnt:content abstract
 
 [jnt:mailFormAction] > jnt:formAction
  - j:action (string) = 'mail' autocreated hidden indexed=no
- - j:to (string,choicelist[users]) mandatory indexed=no
+ - j:to (string, choicelist[users]) mandatory indexed=no
 
 [jnt:defaultFormAction] > jnt:formAction
  - j:action (string) = 'default' autocreated hidden indexed=no
 
 [jnt:redirectFormAction] > jnt:formAction
  - j:action (string) = 'redirect' autocreated hidden indexed=no
- - node (weakreference,picker[type='editoriallink']) mandatory indexed=no
-  
+ - node (weakreference, picker[type='editoriallink']) mandatory indexed=no
+
 [jnt:deleteIdeaAction] > jnt:formAction
- - j:action (string) = 'deleteidea' autocreated hidden indexed=no 
-  
+ - j:action (string) = 'deleteidea' autocreated hidden indexed=no
+
 [jnt:createIdeaAction] > jnt:formAction
- - j:action (string) = 'createidea' autocreated hidden indexed=no 
-  
+ - j:action (string) = 'createidea' autocreated hidden indexed=no
+
 [jnt:createChallengeAction] > jnt:formAction
  - j:action (string) = 'createchallenge' autocreated hidden indexed=no
-  
+
 [jnt:modifyIdeaAction] > jnt:formAction
- - j:action (string) = 'modifyidea' autocreated hidden indexed=no 
-  
+ - j:action (string) = 'modifyidea' autocreated hidden indexed=no
+
 [jnt:modifyChallengeAction] > jnt:formAction
- - j:action (string) = 'modifychallenge' autocreated hidden indexed=no 
+ - j:action (string) = 'modifychallenge' autocreated hidden indexed=no
 
-[jnt:actionList] > jnt:content, jmix:list
- orderable
- + * (jnt:formAction) = jnt:formAction version
+[jnt:actionList] > jnt:content, jmix:list orderable
+ + * (jnt:formAction) = jnt:formAction
 
-[jnt:fieldsetstList] > jnt:content, jmix:list
- orderable
- + * (jnt:fieldset) = jnt:fieldset version
+[jnt:fieldsetstList] > jnt:content, jmix:list orderable
+ + * (jnt:fieldset) = jnt:fieldset
 
-[jnt:formButtonsList] > jnt:content, jmix:list
- orderable
- + * (jnt:formButton) = jnt:formButton version
+[jnt:formButtonsList] > jnt:content, jmix:list orderable
+ + * (jnt:formButton) = jnt:formButton
 
-[jnt:responsesList] > jnt:content, jmix:list
- orderable
- + * (jnt:responseToForm) = jnt:responseToForm version
+[jnt:responsesList] > jnt:content, jmix:list orderable
+ + * (jnt:responseToForm) = jnt:responseToForm
 
-[jnt:form] > jnt:content, jmix:formContent, mix:title
- orderable
+[jnt:form] > jnt:content, jmix:formContent, mix:title orderable
  - j:intro (string)
  + action (jnt:actionList) = jnt:actionList autocreated
  + fieldsets (jnt:fieldsetstList) = jnt:fieldsetstList autocreated
  + formButtons (jnt:formButtonsList) = jnt:formButtonsList autocreated
  + responses (jnt:responsesList) = jnt:responsesList autocreated
 
-[jnt:required] > jnt:formElementValidation
+[jnt:required] > jnt:formElementValidation orderable
 
-[jnt:emailValidation] > jnt:formElementValidation
+[jnt:emailValidation] > jnt:formElementValidation orderable
 
-[jnt:dateValidation] > jnt:formElementValidation
+[jnt:dateValidation] > jnt:formElementValidation orderable
 
-[jnt:rangeValidation] > jnt:formElementValidation
+[jnt:rangeValidation] > jnt:formElementValidation orderable
  - min (long) mandatory
  - max (long) mandatory
 
-[jnt:captcha] > jnt:formElement
+[jnt:captcha] > jnt:formElement orderable
 
-[jnt:fileElement] > jnt:formElement
+[jnt:fileElement] > jnt:formElement orderable
 
-[jnt:htmlInput] > jnt:formElement
- - html (string,richtext)
+[jnt:htmlInput] > jnt:formElement orderable
+ - html (string, richtext)
+
+[jnt:radiobuttonFieldWithUserlist] > jnt:formElement orderable
+ + * (jnt:formListElement)
+ - jcr:defaultValue (long) = '0' mandatory < '[0,]'
+ - jcr:showUserlist (long) = '1' mandatory
+
+[jnt:radiobuttonField] > jnt:formElement orderable
+ + * (jnt:formListElement)
+ - jcr:defaultValue (long) = '0' mandatory < '[0,]'
+
