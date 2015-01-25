@@ -96,7 +96,7 @@ public class DeleteIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
     
-      JCRNodeWrapper nodeSession = session.getNode("/sites/mySite/contents/electrodea/idea/idea1");
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/mmmm");
       nodeSession.remove();
       session.save();
       

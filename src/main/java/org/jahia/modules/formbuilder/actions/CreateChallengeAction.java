@@ -99,15 +99,28 @@ public class CreateChallengeAction extends Action {
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
       List<String> listTitle = parameters.get("title");
       List<String> listDescr = parameters.get("describe-your-challenge");
-      //List<String> listCompl = parameters.get("status");
+      List<String> listCompl = parameters.get("status");
+      List<String> listVisibil = parameters.get("visibility");
       
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
       JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge");
       
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
       jcrNodeWrapper.setProperty("body", listDescr.get(0));
-      //jcrNodeWrapper.setProperty("completed", listCompl.get(0));
       
+       if(listVisibil.get(0).equals("private")){
+        jcrNodeWrapper.setProperty("private",true);
+      }else{
+         jcrNodeWrapper.setProperty("private",false);
+      }
+      
+      if(listCompl.get(0).equals("completed")){
+      jcrNodeWrapper.setProperty("completed", true);
+      }else{
+      jcrNodeWrapper.setProperty("completed", false);
+      }
+      
+     
       //username test
       //String username = nodeSession.getUser().getUsername());
 
@@ -116,9 +129,10 @@ public class CreateChallengeAction extends Action {
       
       session.save();
             
-      String targetPath = "/sites/mySite/home/all-challenges";
+      String targetPath = "/sites/electrodea/home/challenges";
+      parameters.remove(Render.REDIRECT_TO);
       
-      return new ActionResult(HttpServletResponse.SC_OK);         
+      return new ActionResult(HttpServletResponse.SC_OK, targetPath);         
          
      
      
