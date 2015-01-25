@@ -120,6 +120,11 @@ public class CreateChallengeAction extends Action {
       jcrNodeWrapper.setProperty("completed", false);
       }
       
+      
+    //  JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/");
+      //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge");
+      
+      //jcrNodeWrapper.setProperty("ideas","http://electrodea.tk:8080/sites/electrodea/contents/challenges/test123/test1234.html");
      
       //username test
       //String username = nodeSession.getUser().getUsername());

@@ -115,8 +115,14 @@ public class CreateIdeaAction extends Action {
       //imageWrapper = jcrNodeWrapper.uploadFile(img, stream,"image/jpeg" );
       jcrNodeWrapper.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
 	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
-	  jcrNodeWrapper.setProperty("ideas",);
-            
+	  
+     // JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
+    //  challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
+
+     // if(challengeNode == null) return new ActionResult(HttpServletResponse.SC_FORBIDDEN); 
+        
+      //challengeNode.setProperty("jcr:title", "TitelChallengeIdea");
+	 // challengeNode.setProperty("ideas", jcrNodeWrapper, PropertyType.WEAKREFERENCE);      
       session.save();
             
       String targetPath = "";
