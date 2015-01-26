@@ -4,6 +4,7 @@
 <%@ taglib prefix="utility" uri="http://www.jahia.org/tags/utilityLib" %>
 <%@ taglib prefix="template" uri="http://www.jahia.org/tags/templateLib" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="user" uri="http://www.jahia.org/tags/user" %>
 <%@ page import="org.jahia.services.usermanager.*" %>
 <%--@elvariable id="currentNode" type="org.jahia.services.content.JCRNodeWrapper"--%>
 <%--@elvariable id="out" type="java.io.PrintWriter"--%>
@@ -14,11 +15,12 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
-<%@ taglib prefix="query" uri="http://www.jahia.org/tags/queryLib" %>
+<jcr:sql var="listQuerySql"
+         sql="select * from [jnt:user] as result 
+                  where result.[j:firstName] LIKE '%'
+              	  and   result.[j:lastName] LIKE '%'
+              order by result.[j:lastName] ASC"/>
 
-<jcr:jqom var="usermap">
-  <query:selector nodeTypeName="jnt:user"/>
-</jcr:jqom>
 
 <c:set var="required" value=""/>
 <c:if test="${jcr:hasChildrenOfType(currentNode, 'jnt:required')}">
@@ -47,12 +49,16 @@
       <label for="${currentNode.name}">${option.properties['jcr:title'].string}</label>
     </c:forEach>
 	
-  
-  	
+	<c:forEach items="${listQuerySql.nodes}" var="user">
+      	<label>
+        <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
+                           <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
+        ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 
+    	<!--<h4>query test: ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</h4>-->
+    </c:forEach> 
 
 
-
-	<c:forEach items="${usermap.nodes}" var="user">
+	<!--<c:forEach items="${usermap.nodes}" var="user">
       <h4>Query test: ${user.properties['j:firstName'].string} , ${user.properties['j:lastName'].string}</h4>
       ${user.propertiesAsString}</h4>
       
@@ -60,7 +66,7 @@
         <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
                            <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
         ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 	
-	</c:forEach>  
+	</c:forEach>  -->
   
   
     <c:if test="${renderContext.editMode}">

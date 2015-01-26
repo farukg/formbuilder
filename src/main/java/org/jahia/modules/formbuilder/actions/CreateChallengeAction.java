@@ -110,6 +110,7 @@ public class CreateChallengeAction extends Action {
       
        if(listVisibil.get(0).equals("private")){
         jcrNodeWrapper.setProperty("private",true);
+         
       }else{
          jcrNodeWrapper.setProperty("private",false);
       }
