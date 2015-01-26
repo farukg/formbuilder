@@ -23,7 +23,7 @@
 <c:set var="required" value=""/>
 <c:if test="${jcr:hasChildrenOfType(currentNode, 'jnt:required')}">
     <c:set var="required" value="required"/>
-</c:if>
+</c:if> 
 
 <label class="left" for="${currentNode.name}">${currentNode.properties['jcr:title'].string}</label>
 <div class="formMarginLeft">

@@ -12,7 +12,7 @@
 
 [jnt:formButton] > jnt:content, mix:title orderable abstract
 
-[jnt:responseToForm] > nt:unstructured, jnt:content orderable
+[jnt:responseToForm] > jnt:content, nt:unstructured orderable
 
 [jnt:inputText] > jnt:formElement orderable
  - size (long) = '20' autocreated
@@ -113,12 +113,12 @@
 [jnt:htmlInput] > jnt:formElement orderable
  - html (string, richtext)
 
+[jnt:radiobuttonField] > jnt:formElement orderable
+ + * (jnt:formListElement)
+ - jcr:defaultValue (long) = '0' mandatory < '[0,]'
+
 [jnt:radiobuttonFieldWithUserlist] > jnt:formElement orderable
  + * (jnt:formListElement)
  - jcr:defaultValue (long) = '0' mandatory < '[0,]'
  - jcr:showUserlist (long) = '1' mandatory
-
-[jnt:radiobuttonField] > jnt:formElement orderable
- + * (jnt:formListElement)
- - jcr:defaultValue (long) = '0' mandatory < '[0,]'
 

@@ -80,6 +80,7 @@ import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 
+import java.io.*;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.servlet.http.HttpServletRequest;
@@ -94,26 +95,38 @@ import java.util.Map;
  */
 public class CreateIdeaAction extends Action {
     @Override
-    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
-      
+    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {            
+      String img = "endimage";
       List<String> listTitle = parameters.get("title");
-      //List<String> listDescr = parameters.get("description");
+      List<String> listDescr = parameters.get("description");
       List<String> listyoutube = parameters.get("link-to-video");
+      List<String> listChallenge = parameters.get("challenge-name");
       //List<String> listImage = parameters.get("end-image");
-            
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");      
+      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes());
+      //JCRNodeWrapper imageWrapper;/sites/electrodea/contents/challenges
+      ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas/custom-rows-960gs
+      //pagecontent/ideas
+      ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
       JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
       
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));
-      jcrNodeWrapper.setProperty("jcr:desc", "argh");
-      //jcrNodeWrapper.setProperty("image", listImage.get(0));
-      jcrNodeWrapper.setProperty("video", listyoutube.get(0)); // TODO: dynamically fetch YouTube-ID
-      //jcrNodeWrapper.setProperty("video", "zzzzzzz");
-      
+      jcrNodeWrapper.setProperty("jcr:description", listDescr.get(0));
+      //imageWrapper = jcrNodeWrapper.uploadFile(img, stream,"image/jpeg" );
+      jcrNodeWrapper.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
+	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
+	  
+     // JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
+    //  challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
+
+     // if(challengeNode == null) return new ActionResult(HttpServletResponse.SC_FORBIDDEN); 
+        
+      //challengeNode.setProperty("jcr:title", "TitelChallengeIdea");
+	 // challengeNode.setProperty("ideas", jcrNodeWrapper, PropertyType.WEAKREFERENCE);      
       session.save();
             
-      String targetPath = "/sites/electrodea/contents/ideas";
-      
+      String targetPath = "";
+		//parameters.remove(Render.REDIRECT_TO);      
       return new ActionResult(HttpServletResponse.SC_OK);        
     }
 }
