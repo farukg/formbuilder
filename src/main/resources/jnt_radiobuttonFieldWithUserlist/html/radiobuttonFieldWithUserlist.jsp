@@ -51,24 +51,11 @@
 	
 	<c:forEach items="${listQuerySql.nodes}" var="user">
       	<label>
-        <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
+          <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
                            <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
         ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 
-    	<!--<h4>query test: ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</h4>-->
     </c:forEach> 
 
-
-	<!--<c:forEach items="${usermap.nodes}" var="user">
-      <h4>Query test: ${user.properties['j:firstName'].string} , ${user.properties['j:lastName'].string}</h4>
-      ${user.propertiesAsString}</h4>
-      
-      <label>
-        <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
-                           <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
-        ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 	
-	</c:forEach>  -->
-  
-  
     <c:if test="${renderContext.editMode}">
         <p><fmt:message key="label.listOfOptions"/> </p>
         <ol>
