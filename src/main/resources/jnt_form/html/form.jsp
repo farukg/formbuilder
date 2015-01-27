@@ -95,8 +95,9 @@
      
         <template:tokenizedForm>
             <form action="<c:url value='${action}'/>" method="post" id="${currentNode.name}">
-              <input type="hidden" name="challengeid" value=<%= request.getParameter("challengeid") %>/>  
-              <input type="hidden" name="originUrl" value="${pageContext.request.requestURL}"/>
+              <!--<input type="hidden" name="challengeid" value=<%= request.getParameter("challengeid") %>/>  
+              <input type="hidden" name="originUrl" value="${pageContext.request.requestURL}"/> -->
+              <input type="hidden" name="originUrl" value=" ${pageContext.request.requestURL}"/>
                 <input type="hidden" name="jcrNodeType" value="jnt:responseToForm"/>
                 <c:if test="${empty hasRedirect}">
                 <input type="hidden" name="jcrRedirectTo" value="<c:url value='${url.base}${renderContext.mainResource.node.path}'/>"/>
