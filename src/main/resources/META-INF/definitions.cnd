@@ -122,6 +122,6 @@
  - jcr:defaultValue (long) = '0' mandatory < '[0,]'
  - jcr:showUserlist (long) = '1' mandatory
 
-[jnt:challengeName]
+[jnt:challengeName] > jnt:formElement orderable
  - challengeName (string)
 

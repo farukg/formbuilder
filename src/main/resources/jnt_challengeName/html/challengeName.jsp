@@ -16,4 +16,5 @@
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
 
-<h2>DEINE MUM</h2>
+  <c:set var="name" value="<%= request.getParameter("challengename") %>"/>
+  <input ${disabled} type="hidden" name="challengename" id="challengename" value="${name}"/> 

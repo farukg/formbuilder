@@ -58,6 +58,16 @@ public class CreateChallengeAction extends Action {
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
       jcrNodeWrapper.setProperty("body", listDescr.get(0));
        
+       
+       System.out.println("userTEST"); 
+                        System.out.println("userTEST"); 
+       System.out.println("userTEST"); 
+       System.out.println("userTEST"); 
+       System.out.println("userTEST"); 
+       System.out.println("userTEST"); 
+       System.out.println("userTEST"); 
+        
+                          
 	  if(listVisibil.get(0).equals("private")){
          
          jcrNodeWrapper.setProperty("private",true);
