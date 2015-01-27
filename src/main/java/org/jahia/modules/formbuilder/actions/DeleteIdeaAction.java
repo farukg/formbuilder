@@ -96,12 +96,50 @@ public class DeleteIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
     
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/igel");
+      List<String> listChTitle = parameters.get("challenge-title");
+      
+      // --- statically this works 
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/" +listChTitle.get(0));
+      
+      
+      
       nodeSession.remove();
       session.save();
       
-      String targetPath = "";
       
-      return new ActionResult(HttpServletResponse.SC_OK);
+      // --- an idea how to realise a delete operation dynamically:
+      // --- get current node
+      // JCRNodeWrapper currentNode = resource.getNode();
+      
+      // --- some integrity tests before finally removing node:
+      // --- check whether current node is of right type (addNode() in CreateIdeaAction sets this name)
+      /*if (currentNode.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+      // --- get a map of all properties
+      		Map<String, String> propertiesMap = new HashMap<String, String>();
+        	propertiesMap = currentNode.getPropertiesAsString();
+        
+        	for (Map.Entry<String, String> entry : propertiesMap.entrySet()) {
+              	String property = entry.getKey();
+              	String value = entry.getValue();
+              	
+              	if (property.equals("jcr:title")) {
+                  	// do something
+                } else {
+                	// return error
+                }
+              
+            }
+      }*/
+      
+      /*if(currentNode.isNodeType("jcr:title")) {
+        
+        currentNode.remove();
+        
+      }*/
+      
+      
+      String targetPath = "/sites/electrodea/home/challenges.html";
+      
+      return new ActionResult(HttpServletResponse.SC_OK, targetPath);
     }
 }

@@ -76,6 +76,7 @@
 <div class="intro">
     ${currentNode.properties['j:intro'].string}
 </div>
+ 
 <c:if test="${renderContext.editMode}">
     <c:forEach items="${actionNode.nodes}" var="formElement">
         <template:module node="${formElement}" editable="true"/>
@@ -85,13 +86,17 @@
         <template:module node="${actionNode}" view="hidden.placeholder"/>
     </div>
 </c:if>
+
+
 <div class="Form FormBuilder">
 
 
     <c:if test="${not renderContext.editMode}">
+     
         <template:tokenizedForm>
             <form action="<c:url value='${action}'/>" method="post" id="${currentNode.name}">
-                <input type="hidden" name="originUrl" value="${pageContext.request.requestURL}"/>
+              <input type="hidden" name="challengeid" value=<%= request.getParameter("challengeid") %>/>  
+              <input type="hidden" name="originUrl" value="${pageContext.request.requestURL}"/>
                 <input type="hidden" name="jcrNodeType" value="jnt:responseToForm"/>
                 <c:if test="${empty hasRedirect}">
                 <input type="hidden" name="jcrRedirectTo" value="<c:url value='${url.base}${renderContext.mainResource.node.path}'/>"/>

@@ -29,21 +29,22 @@ public class CreateChallengeAction extends Action {
       List<String> listDescr = parameters.get("describe-your-challenge");
       List<String> listCompl = parameters.get("status"); 
       List<String> listVisibil = parameters.get("visibility");
-      List<String> listVisibilBox = parameters.get("visibilitybox"); //Userlist for private challenges
-      
+    // List<String> listVisibilBox = parameters.get("visibilitybox"); //Userlist for private challenges
+   //   
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
-      JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge");
       
+      JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge");
+
       jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
       jcrNodeWrapper.setProperty("body", listDescr.get(0));
        
-	  if(listVisibil.get(0).equals("private")){
+	 // if(listVisibil.get(0).equals("private")){
          
          jcrNodeWrapper.setProperty("private",true);
          
          JCRNodeWrapper nodeSessionGroup = session.getNode("/sites/electrodea/contents/groups");
       	 JCRNodeWrapper jcrNodeWrapperGroup = nodeSessionGroup.addNode(listTitle.get(0), "sysewl:electrodeaGroup");
-        
+/*        
         if (listVisibilBox != null) {
           String[] nodeList = new String[listVisibilBox.size()];
         
@@ -68,7 +69,7 @@ public class CreateChallengeAction extends Action {
 
           }*/
         
-        }
+     /*   }
          
       }else{
          jcrNodeWrapper.setProperty("private",false);
@@ -79,7 +80,7 @@ public class CreateChallengeAction extends Action {
       jcrNodeWrapper.setProperty("completed", true);
       }else{
       jcrNodeWrapper.setProperty("completed", false);
-      }
+      }*/
       
       
     //  JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/");

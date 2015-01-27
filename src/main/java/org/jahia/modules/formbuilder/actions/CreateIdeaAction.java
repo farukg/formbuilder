@@ -12,6 +12,8 @@ import org.jahia.services.render.URLResolver;
 import java.io.*;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.ValueFactory;
+import javax.jcr.PropertyType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -40,8 +42,10 @@ public class CreateIdeaAction extends Action {
       jcrNodeWrapper.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
 	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
 	  
-     // JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
-    //  challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
+      JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
+      //challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
+      //ValueFactory valueFactory = session.getValueFactory();
+      //challengeNode.setProperty("ideas", valueFactory.createValue(jcrNodeWrapper), PropertyType.WEAKREFERENCE);
 
      // if(challengeNode == null) return new ActionResult(HttpServletResponse.SC_FORBIDDEN); 
         
