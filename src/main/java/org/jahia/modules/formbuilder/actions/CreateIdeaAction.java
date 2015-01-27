@@ -26,7 +26,7 @@ public class CreateIdeaAction extends Action {
       List<String> listTitle = parameters.get("title");
       List<String> listDescr = parameters.get("description");
       List<String> listyoutube = parameters.get("link-to-video");
-      List<String> listChallenge = parameters.get("challenge-name");
+      List<String> listChallenge = parameters.get("challengeuuid");
       
       
       System.out.println("TEST OUTPUT: " + parameters.get("challengeuuid"));
@@ -38,16 +38,17 @@ public class CreateIdeaAction extends Action {
       ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas/custom-rows-960gs
       //pagecontent/ideas
       ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
-      JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
       
-      jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));
-      jcrNodeWrapper.setProperty("jcr:description", listDescr.get(0));
+      //JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
+      //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+      
+      //jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));
+      //jcrNodeWrapper.setProperty("jcr:description", listDescr.get(0));
       //imageWrapper = jcrNodeWrapper.uploadFile(img, stream,"image/jpeg" );
-      jcrNodeWrapper.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
+      //jcrNodeWrapper.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
 	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
 	  
-      JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
+      //JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
       //challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
       //ValueFactory valueFactory = session.getValueFactory();
       //challengeNode.setProperty("ideas", valueFactory.createValue(jcrNodeWrapper), PropertyType.WEAKREFERENCE);

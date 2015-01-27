@@ -16,16 +16,37 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+
+import org.jahia.services.content.JCRCallback;
+import org.jahia.services.content.JCRSessionWrapper;
+import org.jahia.services.content.JCRTemplate;
+
+
+import org.json.JSONException;
+import org.slf4j.Logger;
+import javax.jcr.RepositoryException;
+import java.io.IOException;
+
+
+
 /**
  * User: toto
  * Date: 11/8/11
  * Time: 3:29 PM
  */
 public class ModifyChallengeAction extends Action {
-    @Override
-    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
-      
-        JCRNodeWrapper node = resource.getNode();
+JCRTemplate jcrTemplate;
+//Später für die ausgabe im catch und so
+//private static Logger logger = org.slf4j.LoggerFactory.getLogger(RateContent.class);
+public void setJcrTemplate(JCRTemplate jcrTemplate) {
+this.jcrTemplate = jcrTemplate;
+}
+@Override
+public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, final Resource resource, final JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
+public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
+
+  JCRNodeWrapper node = resource.getNode();
       
 	  	List<String> list = parameters.get("title");
     	List<String> list2 = parameters.get("description");
@@ -53,7 +74,8 @@ public class ModifyChallengeAction extends Action {
       
        
         return new ActionResult(HttpServletResponse.SC_OK, targetPath);
-    }
- 
-    
-    }
+  
+		}
+	});
+	}
+}

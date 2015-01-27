@@ -96,46 +96,31 @@ public class DeleteIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
     
-      List<String> listChTitle = parameters.get("challenge-title");
+      //List<String> listChTitle = parameters.get("challenge-title");
       
       // --- statically this works 
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/" +listChTitle.get(0));
-      
-      
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/"
+                                                   +parameters.get("challenge-title").get(0));
       
       nodeSession.remove();
-      session.save();
+      
+      
+      // ---> Delete light:
+      /*nodeSession.remove();
+      session.save();*/
+      // End delete light <---
       
       
       // --- an idea how to realise a delete operation dynamically:
       // --- get current node
-      // JCRNodeWrapper currentNode = resource.getNode();
+      //JCRNodeWrapper currentNode = resource.getNode();
       
       // --- some integrity tests before finally removing node:
       // --- check whether current node is of right type (addNode() in CreateIdeaAction sets this name)
       /*if (currentNode.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
-      // --- get a map of all properties
-      		Map<String, String> propertiesMap = new HashMap<String, String>();
-        	propertiesMap = currentNode.getPropertiesAsString();
+        	currentNode.remove();
         
-        	for (Map.Entry<String, String> entry : propertiesMap.entrySet()) {
-              	String property = entry.getKey();
-              	String value = entry.getValue();
-              	
-              	if (property.equals("jcr:title")) {
-                  	// do something
-                } else {
-                	// return error
-                }
-              
-            }
-      }*/
-      
-      /*if(currentNode.isNodeType("jcr:title")) {
-        
-        currentNode.remove();
-        
-      }*/
+      }*/ 
       
       
       String targetPath = "/sites/electrodea/home/challenges.html";

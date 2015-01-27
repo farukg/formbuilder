@@ -12,7 +12,7 @@
 
 [jnt:formButton] > jnt:content, mix:title orderable abstract
 
-[jnt:responseToForm] > jnt:content, nt:unstructured orderable
+[jnt:responseToForm] > nt:unstructured, jnt:content orderable
 
 [jnt:inputText] > jnt:formElement orderable
  - size (long) = '20' autocreated
@@ -121,4 +121,7 @@
  + * (jnt:formListElement)
  - jcr:defaultValue (long) = '0' mandatory < '[0,]'
  - jcr:showUserlist (long) = '1' mandatory
+
+[jnt:challengeName]
+ - challengeName (string)
 
