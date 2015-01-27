@@ -27,6 +27,11 @@ public class CreateIdeaAction extends Action {
       List<String> listDescr = parameters.get("description");
       List<String> listyoutube = parameters.get("link-to-video");
       List<String> listChallenge = parameters.get("challenge-name");
+      
+      
+      System.out.println("TEST OUTPUT: " + parameters.get("challengeuuid"));
+      
+      
       //List<String> listImage = parameters.get("end-image");
       //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes());
       //JCRNodeWrapper imageWrapper;/sites/electrodea/contents/challenges
