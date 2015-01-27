@@ -30,21 +30,23 @@
         <property name="mailTemplatePath" value="${formbuilderMailTemplatePath:/mails/templates/action/body.vm}"/>
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.RedirectAction">
-        <property name="name" value="redirect"/>
-    </bean>    
+      <property name="name" value="redirect"/> 
+  </bean>
     <bean class="org.jahia.modules.formbuilder.actions.DeleteIdeaAction">
         <property name="name" value="deleteidea"/>
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.CreateIdeaAction">
         <property name="name" value="createidea"/>
-    </bean>
+  	</bean>
     <bean class="org.jahia.modules.formbuilder.actions.ModifyIdeaAction">
         <property name="name" value="modifyidea"/>
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.ModifyChallengeAction">
         <property name="name" value="modifychallenge"/>
+      	<property name="jcrTemplate" ref="jcrTemplate"/>
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.CreateChallengeAction">
         <property name="name" value="createchallenge"/>
+      	<property name="jcrTemplate" ref="jcrTemplate"/>
     </bean>
 </beans>

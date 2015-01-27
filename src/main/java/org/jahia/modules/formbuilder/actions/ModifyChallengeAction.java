@@ -42,18 +42,21 @@ public void setJcrTemplate(JCRTemplate jcrTemplate) {
 this.jcrTemplate = jcrTemplate;
 }
 @Override
-public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, final Resource resource, final JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, final Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
 return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
 public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
 
-  JCRNodeWrapper node = resource.getNode();
-      
+  /**JCRNodeWrapper node = resource.getNode();
+  
+      if (!node.isNodeType("sysewl:electrodeaChallenge"))
+          return new ActionResult(500, targetPath);
+          
 	  	List<String> list = parameters.get("title");
     	List<String> list2 = parameters.get("description");
      	//List<String> list3 = parameters.get("youlink");
      	// List<String> list4 = parameters.get("sysEWLOURname");
       
-   
+         
         JCRNodeWrapper nodeSessionTitle = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/title");
         //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode("Titel des Formulares", "jnt:inputText");
 		JCRNodeWrapper nodeSessionDescription = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/description");	
@@ -68,12 +71,12 @@ public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
        	
         session.save();
         //return null;
-  		String targetPath = "/sites/mySite/testmodify";
+  		//String targetPath = "/sites/mySite/testmodify";
        parameters.remove(Render.REDIRECT_TO);
-      
+      **/
       
        
-        return new ActionResult(HttpServletResponse.SC_OK, targetPath);
+        return new ActionResult(HttpServletResponse.SC_OK);
   
 		}
 	});

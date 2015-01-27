@@ -30,11 +30,6 @@ public class CreateIdeaAction extends Action {
       List<String> listyoutube = parameters.get("link-to-video");
       List<String> listChallenge = parameters.get("challengename");
       
-      
-      
-      System.out.println("TESTT OUTPUT: " + listChallenge);
-      
-      
       //List<String> listImage = parameters.get("end-image");
       //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes());
       //JCRNodeWrapper imageWrapper;/sites/electrodea/contents/challenges
@@ -52,9 +47,6 @@ public class CreateIdeaAction extends Action {
       //imageWrapper = jcrNodeWrapper.uploadFile(img, stream,"image/jpeg" );
       ideaNode.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
 	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
-      
-      
-      
       
       String[] newIdeas;
       

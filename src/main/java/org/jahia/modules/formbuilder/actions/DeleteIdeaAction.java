@@ -96,19 +96,21 @@ public class DeleteIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
     
-      //List<String> listChTitle = parameters.get("challenge-title");
+      List<String> listChTitle = parameters.get("challenge-title");
       
       // --- statically this works 
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/"
-                                                   +parameters.get("challenge-title").get(0));
-      
-      nodeSession.remove();
+                                                   +listChTitle.get(0));
       
       
-      // ---> Delete light:
-      /*nodeSession.remove();
-      session.save();*/
-      // End delete light <---
+      if(listChTitle.get(0) != null) {
+      		nodeSession.remove();
+      }
+      else {
+      		return new ActionResult(HttpServletResponse.SC_NOT_IMPLEMENTED);
+      }
+      
+      session.save();
       
       
       // --- an idea how to realise a delete operation dynamically:

@@ -5,7 +5,6 @@
 <%@ taglib prefix="template" uri="http://www.jahia.org/tags/templateLib" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="user" uri="http://www.jahia.org/tags/user" %>
-<%@ page import="org.jahia.services.usermanager.*" %>
 <%--@elvariable id="currentNode" type="org.jahia.services.content.JCRNodeWrapper"--%>
 <%--@elvariable id="out" type="java.io.PrintWriter"--%>
 <%--@elvariable id="script" type="org.jahia.services.render.scripting.Script"--%>
@@ -19,7 +18,7 @@
          sql="select * from [jnt:user] as result 
                   where result.[j:firstName] LIKE '%'
               	  and   result.[j:lastName] LIKE '%'
-              order by result.[j:lastName] ASC"/>
+              order by lower(result.[j:lastName]) ASC"/>
 
 
 <c:set var="required" value=""/>
@@ -50,10 +49,13 @@
     </c:forEach>
 	
 	<c:forEach items="${listQuerySql.nodes}" var="user">
+      <c:if test="${jcr:isNodeType(user, 'jnt:user')}">
       	<label>
           <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
                            <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
         ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 
+        <h4>${user.properties['j:nodename'].string}</h4>
+  	  </c:if>
     </c:forEach> 
 
     <c:if test="${renderContext.editMode}">
