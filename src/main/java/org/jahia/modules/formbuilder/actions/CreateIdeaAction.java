@@ -11,6 +11,9 @@ import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.io.*;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -32,11 +35,11 @@ public class CreateIdeaAction extends Action {
       
       //List<String> listImage = parameters.get("end-image");
       //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes());
-      //JCRNodeWrapper imageWrapper;/sites/electrodea/contents/challenges
+      //JCRNodeWrapper imageWrapper;///sites/electrodea/contents/challenges
       ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas/custom-rows-960gs
       //pagecontent/ideas
       ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas
-      
+      //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
       JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
       
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
@@ -44,9 +47,30 @@ public class CreateIdeaAction extends Action {
       
       ideaNode.setProperty("jcr:title", listTitle.get(0));
       ideaNode.setProperty("jcr:description", listDescr.get(0));
-      //imageWrapper = jcrNodeWrapper.uploadFile(img, stream,"image/jpeg" );
-      ideaNode.setProperty("video", "yIZco8Dfyco"); // TODO: dynamically fetch YouTube-ID
-	  //jcrNodeWrapper.setProperty("image", imageWrapper.getPath());
+      //imageWrapper = ideaNode.uploadFile(img, stream,"image/jpeg" );
+      
+      //get youtube id from youtube-link/url
+      String youtubeUrl = listyoutube.get(0);      
+	  if (youtubeUrl != null && youtubeUrl.trim().length() > 0
+				/*&& youtubeUrl.startsWith("http")*/ ) {
+			String expression = "^.*((youtu.be"
+					+ "\\/)"
+					+ "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*";
+			
+			CharSequence input = youtubeUrl;
+			Pattern pattern = Pattern.compile(expression,
+					Pattern.CASE_INSENSITIVE);
+			Matcher matcher = pattern.matcher(input);
+			if (matcher.matches()) {
+				String groupIndex1 = matcher.group(7);
+				if (groupIndex1 != null && groupIndex1.length() == 11)
+					ideaNode.setProperty("video", groupIndex1);
+               else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
+        else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+                  
+      //ideaNode.setProperty("image", imageWrapper.getPath());
       
       String[] newIdeas;
       
@@ -83,8 +107,8 @@ public class CreateIdeaAction extends Action {
 	 // challengeNode.setProperty("ideas", jcrNodeWrapper, PropertyType.WEAKREFERENCE);      
       session.save();
             
-      String targetPath = "";
-		//parameters.remove(Render.REDIRECT_TO);      
-      return new ActionResult(HttpServletResponse.SC_OK);        
+      String targetPath = "/sites/electrodea/contents/ideas/" + listTitle.get(0);
+	  parameters.remove(Render.REDIRECT_TO);      
+      return new ActionResult(HttpServletResponse.SC_OK, targetPath);        
     }
 }

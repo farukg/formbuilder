@@ -16,8 +16,8 @@
 
 <jcr:sql var="listQuerySql"
          sql="select * from [jnt:user] as result 
-                  where result.[j:firstName] LIKE '%'
-              	  and   result.[j:lastName] LIKE '%'
+                  where result.[j:firstName] LIKE '_%'
+              	  and   result.[j:lastName] LIKE '_%'
               order by lower(result.[j:lastName]) ASC"/>
 
 
@@ -54,7 +54,6 @@
           <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
                            <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
         ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 
-        <h4>${user.properties['j:nodename'].string}</h4>
   	  </c:if>
     </c:forEach> 
 

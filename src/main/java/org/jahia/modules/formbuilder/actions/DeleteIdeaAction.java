@@ -96,18 +96,21 @@ public class DeleteIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
     
-      List<String> listChTitle = parameters.get("challenge-title");
+      List<String> listChTitle = parameters.get("idea-title");
       
       // --- statically this works 
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges/"
+      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
                                                    +listChTitle.get(0));
       
+      //JCRNodeWrapper nodeSession = resource.getNode();
       
-      if(listChTitle.get(0) != null) {
-      		nodeSession.remove();
+      if(nodeSession.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdeas")) {
+        
+        	nodeSession.remove();
+          
       }
       else {
-      		return new ActionResult(HttpServletResponse.SC_NOT_IMPLEMENTED);
+      		return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       }
       
       session.save();
