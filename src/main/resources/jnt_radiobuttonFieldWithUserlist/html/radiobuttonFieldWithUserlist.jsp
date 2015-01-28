@@ -14,9 +14,12 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
+<template:addResources type="javascript" resources="jquery.min.js"/>
+<template:addResources type="javascript" resources="jquery.filtertable.js" />
+
 <script type='text/javascript'>
-  
-  
+  //$(document).ready($('#table').filterTable());
+
   function onChangeToPrivateHandler() {
     
     if ($('#visibility:checked').val() == "private") {
@@ -63,9 +66,10 @@
       </c:choose>
       <c:set var="counter" value="${counter+1}"/>
       <label for="${currentNode.name}">${option.properties['jcr:title'].string}</label>
-    </c:forEach>
-	
-	<a href="#myModal" id="btnuserlist" style="display: none;" role="button" class="btn" data-toggle="modal">Choose Users</a>
+    </c:forEach> 
+  
+	<!--style="display: none;"-->
+	<a href="#myModal" id="btnuserlist" role="button" class="btn" data-toggle="modal">Choose Users</a>
  
     <!-- Modal -->
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -75,12 +79,15 @@
       </div>
       <div class="modal-body">
         
-        <table class="table table-condensed">
+        <!--<form class="navbar-search pull-left">
+          <input type="text" id="searchUsers" class="search-query" placeholder="Search">
+        </form>-->
+        <table id="table1" class="table table-condensed">
           <thead>
             <tr>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th scope="col">#</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
             </tr>
           </thead>
           <tbody>
@@ -102,6 +109,12 @@
             </c:forEach>
           </tbody>  
         </table>
+        <script>
+          $(document).ready(function() {
+              $('table').filterTable(); // apply filterTable to all tables on this page
+          });
+        </script> 
+        
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary"  data-dismiss="modal" >Save</button>
