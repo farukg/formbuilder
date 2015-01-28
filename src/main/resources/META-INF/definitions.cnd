@@ -12,7 +12,7 @@
 
 [jnt:formButton] > jnt:content, mix:title orderable abstract
 
-[jnt:responseToForm] > nt:unstructured, jnt:content orderable
+[jnt:responseToForm] > jnt:content, nt:unstructured orderable
 
 [jnt:inputText] > jnt:formElement orderable
  - size (long) = '20' autocreated
@@ -117,11 +117,12 @@
  + * (jnt:formListElement)
  - jcr:defaultValue (long) = '0' mandatory < '[0,]'
 
+[jnt:challengeName] > jnt:formElement orderable
+ - challengeName (string)
+
 [jnt:radiobuttonFieldWithUserlist] > jnt:formElement orderable
  + * (jnt:formListElement)
  - jcr:defaultValue (long) = '0' mandatory < '[0,]'
  - jcr:showUserlist (long) = '1' mandatory
-
-[jnt:challengeName] > jnt:formElement orderable
- - challengeName (string)
+ - jcr:userPicker (weakreference, picker[type='user'])
 

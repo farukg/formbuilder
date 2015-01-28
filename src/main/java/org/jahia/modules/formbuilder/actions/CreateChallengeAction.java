@@ -3,6 +3,7 @@ package org.jahia.modules.formbuilder.actions;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.bin.Render;
+import org.jahia.services.content.JCRValueWrapper;
 import org.jahia.services.content.JCRCallback;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -69,7 +70,8 @@ public class CreateChallengeAction extends Action {
          }
          jcrNodeWrapperGroup.setProperty("members", nodeList, PropertyType.WEAKREFERENCE);
          jcrNodeWrapper.setProperty("group", jcrNodeWrapperGroup.getUUID());
-         /*System.out.println("HasProperty: " + jcrNodeWrapperGroup.hasProperty("members"));
+         
+          /*System.out.println("HasProperty: " + jcrNodeWrapperGroup.hasProperty("members"));
           for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
             		 System.out.println("user:" + user.getNode().getProperty("j:nodename"));
 

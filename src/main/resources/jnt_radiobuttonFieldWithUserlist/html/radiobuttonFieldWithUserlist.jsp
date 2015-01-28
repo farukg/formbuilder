@@ -14,6 +14,21 @@
 <%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
 <%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
 
+<script type='text/javascript'>
+  
+  
+  function onChangeToPrivateHandler() {
+    
+    if ($('#visibility:checked').val() == "private") {
+     	$('#btnuserlist').fadeIn();
+    } else {
+        $('#btnuserlist').fadeOut();
+    }
+  }
+</script>
+
+
+
 <jcr:sql var="listQuerySql"
          sql="select * from [jnt:user] as result 
                   where result.[j:firstName] LIKE '_%'
@@ -40,25 +55,60 @@
     <c:forEach items="${jcr:getNodes(currentNode,'jnt:formListElement')}" var="option">
       <c:choose>
         <c:when test="${counter == defaultValue}">
-          <input ${disabled} type="radio" ${required} class="${required}" name="${currentNode.name}" id="${currentNode.name}" value="${option.name}" checked="true" />
+          <input ${disabled} type="radio" onchange="onChangeToPrivateHandler();" ${required} class="${required}" name="${currentNode.name}" id="${currentNode.name}" value="${option.name}" checked="true" />
         </c:when>
         <c:otherwise>
-           <input ${disabled} type="radio" ${required} class="${required}" name="${currentNode.name}" id="${currentNode.name}" value="${option.name}" <c:if test="${not empty sessionScope.formError and sessionScope.formDatas[currentNode.name][0] eq option.name}">checked="true"</c:if> />
+           <input ${disabled} type="radio" onchange="onChangeToPrivateHandler();" ${required} class="${required}" name="${currentNode.name}" id="${currentNode.name}" value="${option.name}" <c:if test="${not empty sessionScope.formError and sessionScope.formDatas[currentNode.name][0] eq option.name}">checked="true"</c:if> />
         </c:otherwise>
       </c:choose>
       <c:set var="counter" value="${counter+1}"/>
       <label for="${currentNode.name}">${option.properties['jcr:title'].string}</label>
     </c:forEach>
 	
-	<c:forEach items="${listQuerySql.nodes}" var="user">
-      <c:if test="${jcr:isNodeType(user, 'jnt:user')}">
-      	<label>
-          <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
-                           <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
-        ${user.properties['j:lastName'].string} , ${user.properties['j:firstName'].string}</label> 
-  	  </c:if>
-    </c:forEach> 
-
+	<a href="#myModal" id="btnuserlist" style="display: none;" role="button" class="btn" data-toggle="modal">Choose Users</a>
+ 
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Userlist</h3>
+      </div>
+      <div class="modal-body">
+        
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:forEach items="${listQuerySql.nodes}" var="user">
+              <c:if test="${jcr:isNodeType(user, 'jnt:user')}">
+                <tr>
+                  <td>
+                    <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
+                      <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
+                  </td>
+                  <td>
+                    <label>${user.properties['j:firstName'].string}</label> 
+                  </td>
+                  <td>
+                    <label>${user.properties['j:lastName'].string}</label> 
+                  </td>
+                </tr>
+              </c:if>
+            </c:forEach>
+          </tbody>  
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary"  data-dismiss="modal" >Save</button>
+      </div>
+    </div>
+  
+              
     <c:if test="${renderContext.editMode}">
         <p><fmt:message key="label.listOfOptions"/> </p>
         <ol>
