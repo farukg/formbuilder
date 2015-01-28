@@ -68,7 +68,7 @@ public class CreateChallengeAction extends Action {
            //jcrNodeWrapperGroup.addNode("members" , "sysewl:electrodeaGroup", jcrNodeWrapperGroup.getUUID(), null, null, null, null);
          }
          jcrNodeWrapperGroup.setProperty("members", nodeList, PropertyType.WEAKREFERENCE);
-        
+         jcrNodeWrapper.setProperty("group", jcrNodeWrapperGroup.getUUID());
          /*System.out.println("HasProperty: " + jcrNodeWrapperGroup.hasProperty("members"));
           for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
             		 System.out.println("user:" + user.getNode().getProperty("j:nodename"));

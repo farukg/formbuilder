@@ -18,6 +18,8 @@
          sql="select * from [jnt:user] as result 
                   where result.[j:firstName] LIKE '_%'
               	  and   result.[j:lastName] LIKE '_%'
+                  and	result.[j:publicProperties] LIKE '%j:firstName%'
+                  and	result.[j:publicProperties] LIKE '%j:lastName%'
               order by lower(result.[j:lastName]) ASC"/>
 
 
