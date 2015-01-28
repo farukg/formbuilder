@@ -67,10 +67,9 @@
       <c:set var="counter" value="${counter+1}"/>
       <label for="${currentNode.name}">${option.properties['jcr:title'].string}</label>
     </c:forEach> 
+    
+	<a href="#myModal" style="display: none;" id="btnuserlist" role="button" class="btn" data-toggle="modal">Choose Users</a>
   
-	<!--style="display: none;"-->
-	<a href="#myModal" id="btnuserlist" role="button" class="btn" data-toggle="modal">Choose Users</a>
- 
     <!-- Modal -->
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">

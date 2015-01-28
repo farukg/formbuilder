@@ -10,6 +10,9 @@ import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
+import org.jahia.tools.files.*;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,14 +30,17 @@ import java.util.Map;
 public class CreateIdeaAction extends Action {
     @Override
     public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {            
-      String img = "endimage";
+      String img = "end-image";
       List<String> listTitle = parameters.get("title");
       List<String> listDescr = parameters.get("description");
       List<String> listyoutube = parameters.get("link-to-video");
-      List<String> listChallenge = parameters.get("challengename");
-      
+      List<String> listChallenge = parameters.get("challengename");      
       //List<String> listImage = parameters.get("end-image");
-      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes());
+      
+      //FileUpload fileUpload = (FileUpload) req.getAttribute(FileUpload.FILEUPLOAD_ATTRIBUTE);
+      //DiskFileItem inputFile = fileUpload.getFileItems().get("end-image");      
+      
+      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF8"));
       //JCRNodeWrapper imageWrapper;///sites/electrodea/contents/challenges
       ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas/custom-rows-960gs
       //pagecontent/ideas
@@ -44,6 +50,8 @@ public class CreateIdeaAction extends Action {
       
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
       JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+      //imageWrapper = ideaNode.uploadFile(inputFile.getName(), inputFile.getInputStream(), inputFile.getContentType());
+      //imageWrapper = ideaNode.uploadFile("jnt:resource", inputFile.getInputStream(), inputFile.getContentType());
       
       ideaNode.setProperty("jcr:title", listTitle.get(0));
       ideaNode.setProperty("jcr:description", listDescr.get(0));
