@@ -46,18 +46,18 @@ public class DeleteIdeaAction extends Action {
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
 															+listChTitle.get(0));
 
-				if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+				/*if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
 					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				}
 				else {
                   
                   	// --- Check wheter user of this session is the same as creation user of this idea?!
-                  	/*if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
-                		return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                	} else {*/
+                  	//if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
+                	//	return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                	//} else {
 					nodeSession.remove();
 					session.save();
-				}
+				}*/
 				
 				//String targetPath = "/sites/electrodea/home/challenges";
 				return new ActionResult(HttpServletResponse.SC_OK);
