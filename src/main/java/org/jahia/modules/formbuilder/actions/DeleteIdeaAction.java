@@ -44,7 +44,7 @@ public class DeleteIdeaAction extends Action {
 
 				final List<String> listChTitle = parameters.get("ideaTitle");
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
-															+listChTitle.get(0));
+															+listChTitle.get(0)); 
 
 				/*if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
 					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
