@@ -13,6 +13,13 @@ import org.jahia.services.render.URLResolver;
 import org.jahia.tools.files.*;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 
+import javax.jcr.RepositoryException;
+import org.jahia.services.content.JCRCallback;
+import org.jahia.services.content.JCRTemplate;
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.jahia.services.usermanager.JahiaUser;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,35 +35,52 @@ import java.util.List;
 import java.util.Map;
 
 public class CreateIdeaAction extends Action {
-    @Override
-    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {            
-      String img = "end-image";
-      List<String> listTitle = parameters.get("title");
-      List<String> listDescr = parameters.get("description");
-      List<String> listyoutube = parameters.get("link-to-video");
-      List<String> listChallenge = parameters.get("challengename");      
-      //List<String> listImage = parameters.get("end-image");
+  
+JCRTemplate jcrTemplate;
+//Später für die ausgabe im catch und so
+//private static Logger logger = org.slf4j.LoggerFactory.getLogger(RateContent.class);
+public void setJcrTemplate(JCRTemplate jcrTemplate) {
+	this.jcrTemplate = jcrTemplate;
+}
+  
+@Override
+public ActionResult doExecute(final HttpServletRequest req, final RenderContext renderContext, final Resource resource, final JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+	return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
+		public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
       
-      //FileUpload fileUpload = (FileUpload) req.getAttribute(FileUpload.FILEUPLOAD_ATTRIBUTE);
-      //DiskFileItem inputFile = fileUpload.getFileItems().get("end-image");      
+      String img = "image";
+      final List<String> listTitle = parameters.get("title");
+      final List<String> listDescr = parameters.get("description");
+      final List<String> listyoutube = parameters.get("link-to-video");
+      final List<String> listChallenge = parameters.get("challengename");      
+      final List<String> listImage = parameters.get("end-image");      
       
-      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF8"));
-      //JCRNodeWrapper imageWrapper;///sites/electrodea/contents/challenges
-      ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas/custom-rows-960gs
-      //pagecontent/ideas
-      ///sites/electrodea/home/challenges/create-challenge/demo-challenge-1/pagecontent/ideas
-      //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+           
       JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
-      
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
       JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
-      //imageWrapper = ideaNode.uploadFile(inputFile.getName(), inputFile.getInputStream(), inputFile.getContentType());
-      //imageWrapper = ideaNode.uploadFile("jnt:resource", inputFile.getInputStream(), inputFile.getContentType());
-      
-      ideaNode.setProperty("jcr:title", listTitle.get(0));
-      ideaNode.setProperty("jcr:description", listDescr.get(0));
+            
+      //image alt
+      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF-8"));
+      //JCRNodeWrapper imageWrapper;
       //imageWrapper = ideaNode.uploadFile(img, stream,"image/jpeg" );
       
+      //image neu
+       /**   try{
+      JCRNodeWrapper imageWrapper;
+      FileUpload fileUpload = (FileUpload) req.getAttribute(FileUpload.FILEUPLOAD_ATTRIBUTE);
+      DiskFileItem inputFile = fileUpload.getFileItems().get("end-image");       
+      imageWrapper = ideaNode.uploadFile(inputFile.getName(), inputFile.getInputStream(), inputFile.getContentType());
+      imageWrapper = ideaNode.uploadFile(inputFile.getName(), inputFile.getInputStream(), inputFile.getContentType());    
+      ideaNode.setProperty("endImage", imageWrapper);
+          }catch(Exception e){
+             ideaNode.setProperty("jcr:title", "Fehler");
+           }
+          */ 
+      
+     ideaNode.setProperty("jcr:title", listTitle.get(0));
+      ideaNode.setProperty("jcr:description", listDescr.get(0));
+            
       //get youtube id from youtube-link/url
       String youtubeUrl = listyoutube.get(0);      
 	  if (youtubeUrl != null && youtubeUrl.trim().length() > 0
@@ -76,9 +100,8 @@ public class CreateIdeaAction extends Action {
                else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			}
         else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
-                  
-      //ideaNode.setProperty("image", imageWrapper.getPath());
+		}                  
+     
       
       String[] newIdeas;
       
@@ -99,8 +122,6 @@ public class CreateIdeaAction extends Action {
         newIdeas[0] = ideaNode.getUUID();
       }
       
-      
-      
       challengeNode.setProperty("ideas", newIdeas, PropertyType.WEAKREFERENCE);
         
 	  
@@ -118,5 +139,7 @@ public class CreateIdeaAction extends Action {
       String targetPath = "/sites/electrodea/contents/ideas/" + listTitle.get(0);
 	  parameters.remove(Render.REDIRECT_TO);      
       return new ActionResult(HttpServletResponse.SC_OK, targetPath);        
+           }
+        }); 
     }
 }

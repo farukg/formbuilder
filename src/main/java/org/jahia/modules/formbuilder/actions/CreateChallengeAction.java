@@ -27,7 +27,7 @@ import java.util.Map;
 public class CreateChallengeAction extends Action {
     JCRTemplate jcrTemplate;
   //für spätere Ausgaben
-    //private static Logger logger = org.slf4j.LoggerFactory.getLogger(RateContent.class);
+   // private static Logger logger = org.slf4j.LoggerFactory.getLogger(CreateChallengeAction.class);
     
     public void setJcrTemplate(JCRTemplate jcrTemplate) {
         this.jcrTemplate = jcrTemplate;
@@ -35,9 +35,22 @@ public class CreateChallengeAction extends Action {
 
     @Override
     public ActionResult doExecute(HttpServletRequest req, final RenderContext renderContext, final Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
-        return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
+       return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
             public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
-                List<String> listTitle = parameters.get("title");
+             
+          /*List<String> listTitle = parameters.get("title");
+      List<String> listDescr = parameters.get("description");
+      
+      JCRNodeWrapper nodeSession = session.getNode("/sites/mySite/contents/electrodea/idea");
+      JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+      
+      jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));
+      jcrNodeWrapper.setProperty("body", listDescr.get(0));
+      jcrNodeWrapper.setProperty("video", "dtnNO5_Ao6U"); // TODO: dynamically fetch YouTube-ID*/
+      
+	//	logger.warn("Warning funktioniert");
+
+		List<String> listTitle = parameters.get("title");
       final List<String> listDescr = parameters.get("describe-your-challenge");
       final List<String> listCompl = parameters.get("status"); 
       final List<String> listVisibil = parameters.get("visibility");
@@ -111,6 +124,6 @@ public class CreateChallengeAction extends Action {
       return new ActionResult(HttpServletResponse.SC_OK, targetPath);         
      
             }
-        });
+        }); 
     }
 }

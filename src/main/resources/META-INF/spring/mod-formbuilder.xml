@@ -34,9 +34,11 @@
   </bean>
     <bean class="org.jahia.modules.formbuilder.actions.DeleteIdeaAction">
         <property name="name" value="deleteidea"/>
+      	<property name="jcrTemplate" ref="jcrTemplate"/>
     </bean>
     <bean class="org.jahia.modules.formbuilder.actions.CreateIdeaAction">
         <property name="name" value="createidea"/>
+      	<property name="jcrTemplate" ref="jcrTemplate"/>
   	</bean>
     <bean class="org.jahia.modules.formbuilder.actions.ModifyIdeaAction">
         <property name="name" value="modifyidea"/>

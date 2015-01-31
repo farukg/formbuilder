@@ -5,60 +5,63 @@ import org.jahia.bin.ActionResult;
 import org.jahia.bin.Render;
 import org.jahia.services.content.JCRNodeWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
+import org.jahia.services.content.JCRCallback;
+import org.jahia.services.content.JCRTemplate;
 import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-/**
- * User: toto
- * Date: 11/8/11
- * Time: 3:29 PM
- */
+
 public class DeleteIdeaAction extends Action {
-    @Override
-    public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {    
-      
-      List<String> listChTitle = parameters.get("ideaTitle");
-      
-      // --- statically this works 
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
-                                                   +listChTitle.get(0));
-      
-      //JCRNodeWrapper nodeSession = resource.getNode();
-      
-      if(nodeSession.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
-        
-        	nodeSession.remove();
-          
-      }
-      else {
-      		return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      }
-      
-      session.save();
-      
-      
-      // --- an idea how to realise a delete operation dynamically:
-      // --- get current node
-      //JCRNodeWrapper currentNode = resource.getNode();
-      
-      // --- some integrity tests before finally removing node:
-      // --- check whether current node is of right type (addNode() in CreateIdeaAction sets this name)
-      /*if (currentNode.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
-        	currentNode.remove();
-        
-      }*/ 
-      
-      
-      String targetPath = "/sites/electrodea/home/challenges";
-      
-      return new ActionResult(HttpServletResponse.SC_OK, targetPath);
+  
+  	JCRTemplate jcrTemplate = null;
+	public void setJcrTemplate(JCRTemplate jcrTemplate) {
+        this.jcrTemplate = jcrTemplate;
     }
+  	
+  
+	@Override
+	public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+
+		return (ActionResult)jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
+
+			public Object doInJCR(JCRSessionWrapper session) throws RepositoryException { 
+
+				// --- TODO: This should be done more dynamically
+				// 1. option:
+				//JCRNodeWrapper nodeSession = resource.getNode();
+				// 2. option:
+				//String absPath = getAbsoluteContextPath(req);
+				// 3. option:
+				//JCRNodeWrapper node = session.getNodeByUUID(resource.getNode().getIdentifier());
+
+				final List<String> listChTitle = parameters.get("ideaTitle");
+				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
+															+listChTitle.get(0));
+
+				if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				}
+				else {
+                  
+                  	// --- Check wheter user of this session is the same as creation user of this idea?!
+                  	/*if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
+                		return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                	} else {*/
+					nodeSession.remove();
+					session.save();
+				}
+				
+				//String targetPath = "/sites/electrodea/home/challenges";
+				return new ActionResult(HttpServletResponse.SC_OK);
+			}
+		});
+	}
 }
