@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.jahia.services.usermanager.JahiaUser;
 
+import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
+
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +48,8 @@ public class CreateChallengeAction extends Action {
       final List<String> listVisibil = parameters.get("visibility");
       final List<String> listVisibilBox = parameters.get("visibilitybox"); //Userlist for private challenges
       
+	  System.out.println("Rights:" + FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE));
+              
       JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
       
       JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge", null, null, renderContext.getUser().getUsername() , null, null);

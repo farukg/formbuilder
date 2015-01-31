@@ -87,8 +87,8 @@
   <name>Jahia Form Builder</name>
   <description>These are the custom module (Jahia Form Builder) for running on a Jahia server.</description>
   <scm>
-    <connection>scm:git:https://github.com/farukg/formbuilder</connection>
-    <developerConnection>scm:git:https://github.com/farukg/formbuilder</developerConnection>
+    <connection>scm:git:git@github.com:farukg/formbuilder.git</connection>
+    <developerConnection>scm:git:git@github.com:farukg/formbuilder.git</developerConnection>
     <url>scm:git:git@github.com:Jahia/formbuilder.git</url>
   </scm>
   <distributionManagement>
