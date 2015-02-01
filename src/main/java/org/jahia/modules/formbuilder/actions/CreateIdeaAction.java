@@ -71,7 +71,7 @@ public class CreateIdeaAction extends Action {
               
 				JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
-				JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+				JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea", null, null, renderContext.getUser().getUsername() , null, null);
 
 				//image alt
 				//InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF-8"));
