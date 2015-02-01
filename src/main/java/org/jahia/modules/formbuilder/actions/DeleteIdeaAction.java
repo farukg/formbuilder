@@ -44,12 +44,16 @@ public class DeleteIdeaAction extends Action {
 				//JCRNodeWrapper node = session.getNodeByUUID(resource.getNode().getIdentifier());
 
 				final List<String> listChTitle = parameters.get("ideaTitle");
-                
-                //TODO WE NEED THE CHALLENGENAME
-                if (FormBuilderHelper.checkWritingRights(session, renderContext, "", listChTitle.get(0), FormBuilderHelper.DELETE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
-                	//In this case the user has not the right to delete the idea
-                	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
-              	}
+
+                /*try {
+                  //TODO WE NEED THE CHALLENGENAME
+                  if (FormBuilderHelper.checkWritingRights(session, renderContext, "", listChTitle.get(0), FormBuilderHelper.DELETE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
+                      //In this case the user has not the right to delete the idea
+                      return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                  }
+                } catch (RepositoryException e) {
+                 	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+                }*/
                 
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
 						+listChTitle.get(0));
