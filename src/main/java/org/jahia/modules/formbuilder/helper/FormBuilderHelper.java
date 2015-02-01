@@ -76,6 +76,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.jahia.services.content.JCRValueWrapper;
+import org.jahia.services.content.JCRNodeWrapper;
+import org.jahia.services.content.JCRSessionWrapper;
+import javax.jcr.RepositoryException;
+import org.jahia.services.render.RenderContext;
+
 import javax.jcr.NodeIterator;
 
 import org.jahia.services.content.JCRNodeWrapper;
@@ -84,6 +90,26 @@ import org.slf4j.Logger;
 public class FormBuilderHelper {
 	private transient static Logger logger = org.slf4j.LoggerFactory.getLogger(FormBuilderHelper.class);
 	
+  
+    public final static int CREATE_CHALLENGE = 0;
+    public final static int MODIFY_CHALLENGE = 1;
+    public final static int DELETE_CHALLENGE = 2;
+      
+    public final static int CREATE_IDEA = 3;
+    public final static int MODIFY_IDEA = 4;
+    public final static int DELETE_IDEA = 5;
+      
+    
+    public final static int RET_SUCCESS = 10;
+    public final static int RET_NOT_LOGGED_IN = 11;
+    public final static int RET_ERROR_NO_SUCH_CHALLENGE = 12;
+    public final static int RET_NOT_OWNER = 13;
+    public final static int RET_NOT_MEMBER = 14;
+    public final static int RET_IDEA_ALREADY_EXISTS = 15;
+    public final static int RET_CHALLENGE_ALREADY_EXISTS = 16;
+    public final static int RET_ERROR_NO_SUCH_IDEA = 17;
+    public final static int RET_WRONG_ACTION = 18;
+  
 	public static String getNodeTitle(JCRNodeWrapper formNode, String fieldname) {
 	    JCRNodeWrapper node = getFieldNode(formNode, fieldname);
 	    if(node != null) {
@@ -245,4 +271,117 @@ private static String getBirthday(Map<String, List<String>> values, int position
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(date.getTime());
 	}
+  
+public static int checkWritingRights(JCRSessionWrapper session, RenderContext renderContext, String challengeTitle, String ideaTitle, int action) throws RepositoryException{
+   
+    if (renderContext.isLoggedIn()) {
+      JCRNodeWrapper challengesNode = session.getNode("/sites/electrodea/contents/challenges");
+      JCRNodeWrapper ideasNode = session.getNode("/sites/electrodea/contents/ideas");
+      
+      switch (action) {
+      	case(CREATE_CHALLENGE):
+        	if (challengesNode.hasNode(challengeTitle)) {
+          		return RET_CHALLENGE_ALREADY_EXISTS;
+            } else {
+              return RET_SUCCESS;
+            }
+        
+        case(MODIFY_CHALLENGE):
+        	if (challengesNode.hasNode(challengeTitle)) {
+          	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
+              if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
+                return RET_SUCCESS;
+              } else {
+                return RET_NOT_OWNER;
+              }
+            } else {
+              return RET_ERROR_NO_SUCH_CHALLENGE;
+            }
+        
+        case(DELETE_CHALLENGE):
+        	if (challengesNode.hasNode(challengeTitle)) {
+          	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
+              if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
+                return RET_SUCCESS;
+              } else {
+                return RET_NOT_OWNER;
+              }
+            } else {
+              return RET_ERROR_NO_SUCH_CHALLENGE;
+            }
+        	
+        case(CREATE_IDEA):
+
+        	if (challengesNode.hasNode(challengeTitle)) {
+              if (!ideasNode.hasNode(ideaTitle)) {
+                JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
+                if (challenge.hasProperty("group")) {
+                  JCRNodeWrapper jcrNodeWrapperGroup = challenge.getProperty("group").getContextualizedNode();
+                  if (jcrNodeWrapperGroup.hasProperty("members")) {
+                    for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
+                      if(renderContext.getUser().getUsername().equals(user.getNode().getProperty("j:nodename"))) {
+                        return RET_SUCCESS;
+                      }
+                    }
+                  } else {
+                    return RET_NOT_MEMBER;
+                  }
+                } else {
+                  return RET_NOT_MEMBER;
+                }
+              } else {
+                return RET_IDEA_ALREADY_EXISTS;
+              }
+            } else {
+              return RET_ERROR_NO_SUCH_CHALLENGE;
+            }
+        	return RET_NOT_MEMBER;
+        
+        case(MODIFY_IDEA):
+			if (ideasNode.hasNode(ideaTitle)) {
+            	JCRNodeWrapper idea = ideasNode.getNode(ideaTitle);
+              if (renderContext.getUser().getUsername().equals(idea.getProperty("createdBy"))) {
+                return RET_SUCCESS;
+              } else {
+                return RET_NOT_OWNER;
+              }
+            } else {
+            	return RET_ERROR_NO_SUCH_IDEA;
+            }
+        
+        case(DELETE_IDEA):
+        	if (ideasNode.hasNode(ideaTitle)) {
+            	JCRNodeWrapper idea = ideasNode.getNode(ideaTitle);
+              if (renderContext.getUser().getUsername().equals(idea.getProperty("createdBy"))) {
+                return RET_SUCCESS;
+              } else {
+               	if (challengesNode.hasNode(challengeTitle)) {
+                  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
+                  if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
+                    return RET_SUCCESS;
+                  } else {
+                    return RET_NOT_OWNER;
+                  }
+                } else {
+                  return RET_ERROR_NO_SUCH_CHALLENGE;
+                }
+              }
+            } else {
+            	return RET_ERROR_NO_SUCH_IDEA;
+            }
+        
+        default:
+        	return RET_WRONG_ACTION;
+        
+        
+      }
+      
+    } else {
+      return RET_NOT_LOGGED_IN;
+    } 
+     
+    
+    
+  }
+  
 }

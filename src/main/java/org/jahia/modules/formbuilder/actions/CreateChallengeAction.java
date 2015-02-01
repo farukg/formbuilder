@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.jahia.services.usermanager.JahiaUser;
 
+import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
+
 import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CreateChallengeAction extends Action {
+
 	JCRTemplate jcrTemplate;
 	//für spätere Ausgaben
 	// private static Logger logger = org.slf4j.LoggerFactory.getLogger(CreateChallengeAction.class);
@@ -75,10 +78,10 @@ public class CreateChallengeAction extends Action {
 						jcrNodeWrapper.setProperty("group", jcrNodeWrapperGroup.getUUID());
 
 						/*System.out.println("HasProperty: " + jcrNodeWrapperGroup.hasProperty("members"));
-          for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
-            		 System.out.println("user:" + user.getNode().getProperty("j:nodename"));
-
-          }*/
+                        for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
+                                   System.out.println("user:" + user.getNode().getProperty("j:nodename"));
+              
+                        }*/
 
 					}
 
