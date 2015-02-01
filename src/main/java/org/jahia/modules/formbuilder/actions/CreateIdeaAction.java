@@ -56,10 +56,11 @@ public class CreateIdeaAction extends Action {
 				final List<String> listChallenge = parameters.get("challengename");      
 				final List<String> listImage = parameters.get("end-image");      
 
-				/*System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
+				System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
                 System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
                 System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
-              	try {
+              	/*
+                try {
                   if (FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
                 	//In this case the user has not the right to create an idea
                 	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 

@@ -315,19 +315,23 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         	if (challengesNode.hasNode(challengeTitle)) {
               if (!ideasNode.hasNode(ideaTitle)) {
                 JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-                if (challenge.hasProperty("group")) {
-                  JCRNodeWrapper jcrNodeWrapperGroup = challenge.getProperty("group").getContextualizedNode();
-                  if (jcrNodeWrapperGroup.hasProperty("members")) {
-                    for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
-                      if(renderContext.getUser().getUsername().equals(user.getNode().getProperty("j:nodename"))) {
-                        return RET_SUCCESS;
+                if (!challenge.getProperty("private").getRealValue().getBoolean()) {
+                  return RET_SUCCESS;
+                } else {
+                  if (challenge.hasProperty("group")) {
+                    JCRNodeWrapper jcrNodeWrapperGroup = challenge.getProperty("group").getContextualizedNode();
+                    if (jcrNodeWrapperGroup.hasProperty("members")) {
+                      for (JCRValueWrapper user: jcrNodeWrapperGroup.getProperty("members").getRealValues()) {
+                        if(renderContext.getUser().getUsername().equals(user.getNode().getProperty("j:nodename"))) {
+                          return RET_SUCCESS;
+                        }
                       }
+                    } else {
+                      return RET_NOT_MEMBER;
                     }
                   } else {
                     return RET_NOT_MEMBER;
                   }
-                } else {
-                  return RET_NOT_MEMBER;
                 }
               } else {
                 return RET_IDEA_ALREADY_EXISTS;
