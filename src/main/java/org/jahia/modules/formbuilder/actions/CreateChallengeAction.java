@@ -51,7 +51,12 @@ public class CreateChallengeAction extends Action {
 
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
 
-                if (FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
+              	int rights = FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE);
+                System.out.println("RIGHTTEST:" + rights);
+                System.out.println("RIGHTTEST:" + rights);
+                System.out.println("RIGHTTEST:" + rights);
+
+                if (rights != FormBuilderHelper.RET_SUCCESS) {
                   //In this case the user has not the right to create a challenge
                   return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
                 }
