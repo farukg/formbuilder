@@ -20,15 +20,15 @@ import java.util.Map;
 
 
 public class DeleteIdeaAction extends Action {
-  
-  	JCRTemplate jcrTemplate = null;
+
+	JCRTemplate jcrTemplate = null;
 	public void setJcrTemplate(JCRTemplate jcrTemplate) {
-        this.jcrTemplate = jcrTemplate;
-    }
-  	
-  
+		this.jcrTemplate = jcrTemplate;
+	}
+
+
 	@Override
-	public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+	public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, final Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
 
 		return (ActionResult)jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
 
@@ -36,31 +36,34 @@ public class DeleteIdeaAction extends Action {
 
 				// --- TODO: This should be done more dynamically
 				// 1. option:
-				//JCRNodeWrapper nodeSession = resource.getNode();
+				// final JCRNodeWrapper nodeSession = resource.getNode();
 				// 2. option:
-				//String absPath = getAbsoluteContextPath(req);
 				// 3. option:
 				//JCRNodeWrapper node = session.getNodeByUUID(resource.getNode().getIdentifier());
 
 				final List<String> listChTitle = parameters.get("ideaTitle");
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
-															+listChTitle.get(0)); 
+						+listChTitle.get(0));
 
-				/*if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+				if(!nodeSession.getPrimaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+                  	
+                  	System.out.println("debugalex: nodeSession.getPrimaryNodeTypeName: " +nodeSession.getPrimaryNodeTypeName());
+                  
 					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				}
 				else {
-                  
-                  	// --- Check wheter user of this session is the same as creation user of this idea?!
-                  	//if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
-                	//	return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                	//} else {
-					nodeSession.remove();
-					session.save();
-				}*/
-				
-				//String targetPath = "/sites/electrodea/home/challenges";
-				return new ActionResult(HttpServletResponse.SC_OK);
+
+					// --- Check wheter user of this session is the same as creation user of this idea?!
+					/*if(!session.getUser().getUsername().equals(nodeSession.getCreationUser()) ) {
+						return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					} else {*/
+						nodeSession.remove();
+						session.save();
+                
+
+					//String targetPath = "/sites/electrodea/home/challenges";
+					return new ActionResult(HttpServletResponse.SC_OK);
+				}
 			}
 		});
 	}

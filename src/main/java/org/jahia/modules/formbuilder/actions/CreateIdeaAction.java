@@ -35,38 +35,38 @@ import java.util.List;
 import java.util.Map;
 
 public class CreateIdeaAction extends Action {
-  
-JCRTemplate jcrTemplate;
-//Später für die ausgabe im catch und so
-//private static Logger logger = org.slf4j.LoggerFactory.getLogger(RateContent.class);
-public void setJcrTemplate(JCRTemplate jcrTemplate) {
-	this.jcrTemplate = jcrTemplate;
-}
-  
-@Override
-public ActionResult doExecute(final HttpServletRequest req, final RenderContext renderContext, final Resource resource, final JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
-	return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
-		public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
-      
-      String img = "image";
-      final List<String> listTitle = parameters.get("title");
-      final List<String> listDescr = parameters.get("description");
-      final List<String> listyoutube = parameters.get("link-to-video");
-      final List<String> listChallenge = parameters.get("challengename");      
-      final List<String> listImage = parameters.get("end-image");      
-      
-           
-      JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
-      JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
-      JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
-            
-      //image alt
-      //InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF-8"));
-      //JCRNodeWrapper imageWrapper;
-      //imageWrapper = ideaNode.uploadFile(img, stream,"image/jpeg" );
-      
-      //image neu
-       /**   try{
+
+	JCRTemplate jcrTemplate;
+	//Später für die ausgabe im catch und so
+	//private static Logger logger = org.slf4j.LoggerFactory.getLogger(RateContent.class);
+	public void setJcrTemplate(JCRTemplate jcrTemplate) {
+		this.jcrTemplate = jcrTemplate;
+	}
+
+	@Override
+	public ActionResult doExecute(final HttpServletRequest req, final RenderContext renderContext, final Resource resource, final JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+		return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
+			public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
+
+				String img = "image";
+				final List<String> listTitle = parameters.get("title");
+				final List<String> listDescr = parameters.get("description");
+				final List<String> listyoutube = parameters.get("link-to-video");
+				final List<String> listChallenge = parameters.get("challengename");      
+				final List<String> listImage = parameters.get("end-image");      
+
+
+				JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
+				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
+				JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");
+
+				//image alt
+				//InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF-8"));
+				//JCRNodeWrapper imageWrapper;
+				//imageWrapper = ideaNode.uploadFile(img, stream,"image/jpeg" );
+
+				//image neu
+				/**   try{
       JCRNodeWrapper imageWrapper;
       FileUpload fileUpload = (FileUpload) req.getAttribute(FileUpload.FILEUPLOAD_ATTRIBUTE);
       DiskFileItem inputFile = fileUpload.getFileItems().get("end-image");       
@@ -76,70 +76,76 @@ public ActionResult doExecute(final HttpServletRequest req, final RenderContext 
           }catch(Exception e){
              ideaNode.setProperty("jcr:title", "Fehler");
            }
-          */ 
-      
-     ideaNode.setProperty("jcr:title", listTitle.get(0));
-      ideaNode.setProperty("jcr:description", listDescr.get(0));
-            
-      //get youtube id from youtube-link/url
-      String youtubeUrl = listyoutube.get(0);      
-	  if (youtubeUrl != null && youtubeUrl.trim().length() > 0
-				/*&& youtubeUrl.startsWith("http")*/ ) {
-			String expression = "^.*((youtu.be"
-					+ "\\/)"
-					+ "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*";
-			
-			CharSequence input = youtubeUrl;
-			Pattern pattern = Pattern.compile(expression,
-					Pattern.CASE_INSENSITIVE);
-			Matcher matcher = pattern.matcher(input);
-			if (matcher.matches()) {
-				String groupIndex1 = matcher.group(7);
-				if (groupIndex1 != null && groupIndex1.length() == 11)
-					ideaNode.setProperty("video", groupIndex1);
-               else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			}
-        else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}                  
-     
-      
-      String[] newIdeas;
-      
-      if (challengeNode.hasProperty("ideas")) {
-        JCRPropertyWrapper ideaProperty = challengeNode.getProperty("ideas");
-        JCRValueWrapper[] ideas = ideaProperty.getRealValues();
-        int i = 0;
-        newIdeas = new String[ideas.length+1];
-        for (JCRValueWrapper idea : ideas) {
-           newIdeas[i] = idea.getNode().getUUID();
-           i++;
-        }
-        
-        newIdeas[ideas.length] = ideaNode.getUUID();
-        
-      } else {
-        newIdeas = new String[1];
-        newIdeas[0] = ideaNode.getUUID();
-      }
-      
-      challengeNode.setProperty("ideas", newIdeas, PropertyType.WEAKREFERENCE);
-        
-	  
-      //JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
-      //challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
-      //ValueFactory valueFactory = session.getValueFactory();
-      //challengeNode.setProperty("ideas", valueFactory.createValue(jcrNodeWrapper), PropertyType.WEAKREFERENCE);
+				 */ 
 
-     // if(challengeNode == null) return new ActionResult(HttpServletResponse.SC_FORBIDDEN); 
-        
-      //challengeNode.setProperty("jcr:title", "TitelChallengeIdea");
-	 // challengeNode.setProperty("ideas", jcrNodeWrapper, PropertyType.WEAKREFERENCE);      
-      session.save();
-            
-      String targetPath = "/sites/electrodea/contents/ideas/" + listTitle.get(0);
-	  parameters.remove(Render.REDIRECT_TO);      
-      return new ActionResult(HttpServletResponse.SC_OK, targetPath);        
-           }
-        }); 
-    }
+				ideaNode.setProperty("jcr:title", listTitle.get(0));
+				ideaNode.setProperty("jcr:description", listDescr.get(0));
+
+				//get youtube id from youtube-link/url
+				String youtubeUrl = listyoutube.get(0);      
+				if (youtubeUrl != null && youtubeUrl.trim().length() > 0
+						/*&& youtubeUrl.startsWith("http")*/ ) {
+					String expression = "^.*((youtu.be"
+							+ "\\/)"
+							+ "|(v\\/)|(\\/u\\/w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*";
+
+					CharSequence input = youtubeUrl;
+					Pattern pattern = Pattern.compile(expression,
+							Pattern.CASE_INSENSITIVE);
+					Matcher matcher = pattern.matcher(input);
+					if (matcher.matches()) {
+						String groupIndex1 = matcher.group(7);
+						if (groupIndex1 != null && groupIndex1.length() == 11) {
+							ideaNode.setProperty("video", groupIndex1);
+						}
+						else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					}
+					else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				}
+              	else return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+				String[] newIdeas;
+
+				// --- An den Autor dieses Stück Quellcodes: Nach dem Löschen einer Idea in einer Challenge
+                // --- kann mann in dieser challenge keine ideas mehr erstellen.
+                // --- Fehlermeldung: NullPtrException bei in der Schleife bei newIdeas[i]              
+				if (challengeNode.hasProperty("ideas")) {
+					JCRPropertyWrapper ideaProperty = challengeNode.getProperty("ideas");
+					JCRValueWrapper[] ideas = ideaProperty.getRealValues();
+					int i = 0;
+					newIdeas = new String[ideas.length+1];
+					for (JCRValueWrapper idea : ideas) {
+						newIdeas[i] = idea.getNode().getUUID();
+                      	System.out.println("debugalex: If has property ideas. Counter i: " +i+ " newIdeas[i]: " +newIdeas[i]);
+                      	i++;
+					}
+
+					newIdeas[ideas.length] = ideaNode.getUUID();
+
+				} else {
+					newIdeas = new String[1];
+					newIdeas[0] = ideaNode.getUUID();
+                  
+                  	System.out.println("debugalex: else has property ideas. newIdeas[0]: " +newIdeas[0]);
+				}
+				challengeNode.setProperty("ideas", newIdeas, PropertyType.WEAKREFERENCE);
+
+
+				//JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
+				//challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);
+				//ValueFactory valueFactory = session.getValueFactory();
+				//challengeNode.setProperty("ideas", valueFactory.createValue(jcrNodeWrapper), PropertyType.WEAKREFERENCE);
+
+				// if(challengeNode == null) return new ActionResult(HttpServletResponse.SC_FORBIDDEN); 
+
+				//challengeNode.setProperty("jcr:title", "TitelChallengeIdea");
+				// challengeNode.setProperty("ideas", jcrNodeWrapper, PropertyType.WEAKREFERENCE);      
+				session.save();
+
+				String targetPath = "/sites/electrodea/contents/ideas/" + listTitle.get(0);
+				parameters.remove(Render.REDIRECT_TO);      
+				return new ActionResult(HttpServletResponse.SC_OK, targetPath);        
+			}
+		}); 
+	}
 }
