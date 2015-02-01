@@ -64,6 +64,21 @@ public class DeleteIdeaAction extends Action {
 					//String targetPath = "/sites/electrodea/home/challenges";
 					return new ActionResult(HttpServletResponse.SC_OK);
 				}
+              
+              /* DAS STAND EIGENTLICH DA, ABER NUR DER ALTE CODE VON OBEN KOMPILIERT --> ich (Mirko) hab das gemergt und gab Probleme. Einfach mich fragen.
+              
+              if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
+					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				}
+				else {
+                  
+                  	// --- Check wheter user of this session is the same as creation user of this idea?!
+                  	//if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
+                	//	return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                	//} else {
+					nodeSession.remove();
+					session.save();
+				}*/
 			}
 		});
 	}
