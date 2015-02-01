@@ -51,6 +51,11 @@ public class CreateChallengeAction extends Action {
 
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
 
+                if (FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
+                  //In this case the user has not the right to create a challenge
+                  return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                }
+                  
 				JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge", null, null, renderContext.getUser().getUsername() , null, null);
 
 				jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      

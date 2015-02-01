@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
 
 import org.jahia.services.content.JCRCallback;
 import org.jahia.services.content.JCRSessionWrapper;
@@ -56,6 +57,11 @@ public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
      	//List<String> list3 = parameters.get("youlink");
      	// List<String> list4 = parameters.get("sysEWLOURname");
       
+      
+        if (FormBuilderHelper.checkWritingRights(session, renderContext, list.get(0), "", FormBuilderHelper.MODIFY_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
+            //In this case the user has not the right to modify the challenge
+        	new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+		}
          
         JCRNodeWrapper nodeSessionTitle = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/title");
         //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode("Titel des Formulares", "jnt:inputText");

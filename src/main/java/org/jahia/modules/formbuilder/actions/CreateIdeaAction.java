@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.jahia.services.usermanager.JahiaUser;
 
+import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +57,11 @@ public class CreateIdeaAction extends Action {
 				final List<String> listImage = parameters.get("end-image");      
 
 
+                if (FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
+                	//In this case the user has not the right to create an idea
+                	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+              	}
+              
 				JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
 				JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea");

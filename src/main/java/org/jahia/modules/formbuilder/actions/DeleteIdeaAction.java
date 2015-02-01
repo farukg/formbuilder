@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
+
 
 public class DeleteIdeaAction extends Action {
 
@@ -28,7 +30,7 @@ public class DeleteIdeaAction extends Action {
 
 
 	@Override
-	public ActionResult doExecute(HttpServletRequest req, RenderContext renderContext, final Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
+	public ActionResult doExecute(HttpServletRequest req, final RenderContext renderContext, final Resource resource, JCRSessionWrapper session, final Map<String, List<String>> parameters, URLResolver urlResolver) throws Exception {
 
 		return (ActionResult)jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
 
@@ -42,6 +44,13 @@ public class DeleteIdeaAction extends Action {
 				//JCRNodeWrapper node = session.getNodeByUUID(resource.getNode().getIdentifier());
 
 				final List<String> listChTitle = parameters.get("ideaTitle");
+                
+                //TODO WE NEED THE CHALLENGENAME
+                if (FormBuilderHelper.checkWritingRights(session, renderContext, "", listChTitle.get(0), FormBuilderHelper.DELETE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
+                	//In this case the user has not the right to delete the idea
+                	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+              	}
+                
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
 						+listChTitle.get(0));
 
