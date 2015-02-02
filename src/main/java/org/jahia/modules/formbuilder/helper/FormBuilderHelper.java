@@ -289,7 +289,7 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         case(MODIFY_CHALLENGE):
         	if (challengesNode.hasNode(challengeTitle)) {
           	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-              if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
+              if (challenge.getProperty("j:createdBy").equals(renderContext.getUser().getUsername())) {
                 return RET_SUCCESS;
               } else {
                 return RET_NOT_OWNER;
@@ -301,7 +301,7 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         case(DELETE_CHALLENGE):
         	if (challengesNode.hasNode(challengeTitle)) {
           	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-              if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
+              if (challenge.getProperty("j:createdBy").equals(renderContext.getUser().getUsername())) {
                 return RET_SUCCESS;
               } else {
                 return RET_NOT_OWNER;
@@ -344,7 +344,7 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         case(MODIFY_IDEA):
 			if (ideasNode.hasNode(ideaTitle)) {
             	JCRNodeWrapper idea = ideasNode.getNode(ideaTitle);
-              if (renderContext.getUser().getUsername().equals(idea.getProperty("createdBy"))) {
+              if (renderContext.getUser().getUsername().equals(idea.getProperty("jcr:createdBy"))) {
                 return RET_SUCCESS;
               } else {
                 return RET_NOT_OWNER;
@@ -354,21 +354,16 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
             }
         
         case(DELETE_IDEA):
+			System.out.println("Hasnode:" + ideasNode.hasNode(ideaTitle) + " Username:" + renderContext.getUser().getUsername() + " Title:" + ideaTitle);
+
         	if (ideasNode.hasNode(ideaTitle)) {
+              	System.out.println("Ideatitle:" + ideaTitle);
             	JCRNodeWrapper idea = ideasNode.getNode(ideaTitle);
-              if (renderContext.getUser().getUsername().equals(idea.getProperty("createdBy"))) {
+                System.out.println("Username:" + renderContext.getUser().getUsername() + " |CreatedBy:" + idea.getProperty("jcr:createdBy").getValue().getString());
+              if (renderContext.getUser().getUsername().equals(idea.getProperty("jcr:createdBy").getValue().getString())) {
                 return RET_SUCCESS;
               } else {
-               	if (challengesNode.hasNode(challengeTitle)) {
-                  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-                  if (challenge.getProperty("createdBy").equals(renderContext.getUser().getUsername())) {
-                    return RET_SUCCESS;
-                  } else {
-                    return RET_NOT_OWNER;
-                  }
-                } else {
-                  return RET_ERROR_NO_SUCH_CHALLENGE;
-                }
+               	return RET_NOT_OWNER;
               }
             } else {
             	return RET_ERROR_NO_SUCH_IDEA;

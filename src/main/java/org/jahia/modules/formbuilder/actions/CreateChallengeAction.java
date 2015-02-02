@@ -51,20 +51,17 @@ public class CreateChallengeAction extends Action {
 
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/challenges");
 
-              	int rights = FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE);
-                System.out.println("RIGHTTEST:" + rights);
-                System.out.println("RIGHTTEST:" + rights);
-                System.out.println("RIGHTTEST:" + rights);
-
                 try {
                   if (FormBuilderHelper.checkWritingRights(session, renderContext, listTitle.get(0), "", FormBuilderHelper.CREATE_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
                     //In this case the user has not the right to create a challenge
-                    String targetPath = "/sites/electrodea/home/error.html?ret=" + rights;
-                    return new ActionResult(HttpServletResponse.SC_OK, targetPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                    String errorPath = "/sites/electrodea/error";
+                    parameters.remove(Render.REDIRECT_TO);
+                    return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
                   }
                 } catch (RepositoryException e) {
-                  String targetPath = "/sites/electrodea/home/error.html?ret=" + rights;
-                  return new ActionResult(HttpServletResponse.SC_FORBIDDEN, targetPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+                    String errorPath = "/sites/electrodea/error";
+                  	parameters.remove(Render.REDIRECT_TO);
+                  	return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
                 }
                   
 				JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge", null, null, renderContext.getUser().getUsername() , null, null);

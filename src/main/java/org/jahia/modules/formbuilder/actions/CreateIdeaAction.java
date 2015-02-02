@@ -55,19 +55,19 @@ public class CreateIdeaAction extends Action {
 				final List<String> listyoutube = parameters.get("link-to-video");
 				final List<String> listChallenge = parameters.get("challengename");      
 				final List<String> listImage = parameters.get("end-image");      
-
-				System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
-                System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
-                System.out.println("RIGHTS:" + FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA));
-              	/*
+              	
                 try {
                   if (FormBuilderHelper.checkWritingRights(session, renderContext, listChallenge.get(0), listTitle.get(0), FormBuilderHelper.CREATE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
                 	//In this case the user has not the right to create an idea
-                	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
-              	  }
+                	String errorPath = "/sites/electrodea/error";
+                    parameters.remove(Render.REDIRECT_TO);
+                    return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                  }
                 } catch (RepositoryException e) {
-                 	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
-                }*/
+                    String errorPath = "/sites/electrodea/error";
+                  	parameters.remove(Render.REDIRECT_TO);
+                  	return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+                }
               
 				JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
@@ -143,6 +143,10 @@ public class CreateIdeaAction extends Action {
 				}
 				challengeNode.setProperty("ideas", newIdeas, PropertyType.WEAKREFERENCE);
 
+              
+              	String[] challenges = new String[1];
+                challenges[0] = challengeNode.getUUID();
+                ideaNode.setProperty("challenges", challenges, PropertyType.WEAKREFERENCE);
 
 				//JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));
 				//challengeNode.getProperty("ideas").addValue(jcrNodeWrapper);

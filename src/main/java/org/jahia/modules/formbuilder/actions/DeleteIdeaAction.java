@@ -4,6 +4,8 @@ import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.bin.Render;
 import org.jahia.services.content.JCRNodeWrapper;
+import org.jahia.services.content.JCRPropertyWrapper;
+import org.jahia.services.content.JCRValueWrapper;
 import org.jahia.services.content.JCRSessionWrapper;
 import org.jahia.services.content.JCRCallback;
 import org.jahia.services.content.JCRTemplate;
@@ -45,15 +47,21 @@ public class DeleteIdeaAction extends Action {
 
 				final List<String> listChTitle = parameters.get("ideaTitle");
 
-                /*try {
-                  //TODO WE NEED THE CHALLENGENAME
-                  if (FormBuilderHelper.checkWritingRights(session, renderContext, "", listChTitle.get(0), FormBuilderHelper.DELETE_IDEA) != FormBuilderHelper.RET_SUCCESS) {
-                      //In this case the user has not the right to delete the idea
-                      return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                try {
+                  int rights = FormBuilderHelper.checkWritingRights(session, renderContext, "", listChTitle.get(0), FormBuilderHelper.DELETE_IDEA);
+                  System.out.println("Rights:" + rights);
+                  if (rights != FormBuilderHelper.RET_SUCCESS) {
+                    //In this case the user has not the right to delete the idea
+                    String errorPath = "/sites/electrodea/error";
+                    parameters.remove(Render.REDIRECT_TO);
+                    return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
                   }
                 } catch (RepositoryException e) {
-                 	return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
-                }*/
+                  String errorPath = "/sites/electrodea/error";
+				  e.printStackTrace();       
+                  parameters.remove(Render.REDIRECT_TO);
+                  return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+                }
                 
 				final JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas/"
 						+listChTitle.get(0));
@@ -70,28 +78,39 @@ public class DeleteIdeaAction extends Action {
 					/*if(!session.getUser().getUsername().equals(nodeSession.getCreationUser()) ) {
 						return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 					} else {*/
-						nodeSession.remove();
-						session.save();
+                  
+                  	//Verlinkung zu challenges entfernen
+                    if (nodeSession.hasProperty("challenges")) {
+                      JCRPropertyWrapper challenges = nodeSession.getProperty("challenges");
+                      for (JCRValueWrapper challenge: challenges.getRealValues()) {
+                        System.out.println("Challengename:" + challenge.getNode().getProperty("j:nodename"));   
+                        if (challenge.getNode().hasNode("ideas")) {
+                          
+                          System.out.println("Ideas before:" + challenge.getNode().getProperty("ideas").getRealValues());
+                          String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getLength()];
+                          int i=0;
+                          
+                          for (JCRValueWrapper idea: challenge.getNode().getProperty("ideas").getRealValues()) {
+                            if (!idea.getNode().getProperty("j:nodename").equals(listChTitle.get(0))) {
+                              newIdeas[i]=idea.getUUID();
+                              i++;
+                            }                            
+                          }
+                          System.out.println("Ideas after:" + newIdeas);
+                        }
+                          
+                        		
+                        }
+                    }
+                  
+					//nodeSession.remove();
+					//session.save();
                 
 
-					//String targetPath = "/sites/electrodea/home/challenges";
-					return new ActionResult(HttpServletResponse.SC_OK);
+					String targetPath = "/sites/electrodea/home/challenges";
+                    parameters.remove(Render.REDIRECT_TO);
+					return new ActionResult(HttpServletResponse.SC_OK, targetPath);
 				}
-              
-              /* DAS STAND EIGENTLICH DA, ABER NUR DER ALTE CODE VON OBEN KOMPILIERT --> ich (Mirko) hab das gemergt und gab Probleme. Einfach mich fragen.
-              
-              if(!nodeSessiongetPr.imaryNodeTypeName().equals("sysewl:electrodeaIdea")) {
-					return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				}
-				else {
-                  
-                  	// --- Check wheter user of this session is the same as creation user of this idea?!
-                  	//if(!session.getUser().getUsername().equals(nodeSession.getUser()) ) {
-                	//	return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                	//} else {
-					nodeSession.remove();
-					session.save();
-				}*/
 			}
 		});
 	}

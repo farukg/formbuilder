@@ -33,14 +33,18 @@ public class ModifyIdeaAction extends Action {
      	// List<String> list4 = parameters.get("sysEWLOURname");
       
         
-      	/*try {
+      	try {
             if (FormBuilderHelper.checkWritingRights(session, renderContext, "", list.get(0), FormBuilderHelper.MODIFY_IDEA) != FormBuilderHelper.RET_SUCCESS) {
               //In this case the user has not the right to modify the idea
-              return new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+              String errorPath = "/sites/electrodea/error";
+              parameters.remove(Render.REDIRECT_TO);
+              return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
             }
-		} catch (RepositoryException e) {
-        	new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
-        }*/
+        } catch (RepositoryException e) {
+          String errorPath = "/sites/electrodea/error";
+          parameters.remove(Render.REDIRECT_TO);
+          return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+        }
    
         JCRNodeWrapper nodeSessionTitle = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/title");
         //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode("Titel des Formulares", "jnt:inputText");

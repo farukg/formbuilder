@@ -28,13 +28,6 @@ import org.slf4j.Logger;
 import javax.jcr.RepositoryException;
 import java.io.IOException;
 
-
-
-/**
- * User: toto
- * Date: 11/8/11
- * Time: 3:29 PM
- */
 public class ModifyChallengeAction extends Action {
 JCRTemplate jcrTemplate;
 //Später für die ausgabe im catch und so
@@ -60,11 +53,15 @@ public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
         try {
             if (FormBuilderHelper.checkWritingRights(session, renderContext, list.get(0), "", FormBuilderHelper.MODIFY_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
             	//In this case the user has not the right to modify the challenge
-        		new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
-			}
-		} catch (RepositoryException e) {
-        	new ActionResult(HttpServletResponse.SC_FORBIDDEN); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
-        }
+        		String errorPath = "/sites/electrodea/error";
+                    parameters.remove(Render.REDIRECT_TO);
+                    return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong 
+                  }
+                } catch (RepositoryException e) {
+                    String errorPath = "/sites/electrodea/error";
+                  	parameters.remove(Render.REDIRECT_TO);
+                  	return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
+                }
          
         JCRNodeWrapper nodeSessionTitle = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/title");
         //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode("Titel des Formulares", "jnt:inputText");
