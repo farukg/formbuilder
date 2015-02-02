@@ -87,12 +87,12 @@ public class DeleteIdeaAction extends Action {
                         if (challenge.getNode().hasNode("ideas")) {
                           
                           System.out.println("Ideas before:" + challenge.getNode().getProperty("ideas").getRealValues());
-                          String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getLength()];
+                          String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getRealValues().length];
                           int i=0;
                           
                           for (JCRValueWrapper idea: challenge.getNode().getProperty("ideas").getRealValues()) {
                             if (!idea.getNode().getProperty("j:nodename").equals(listChTitle.get(0))) {
-                              newIdeas[i]=idea.getUUID();
+                              newIdeas[i]=idea.getNode().getUUID();
                               i++;
                             }                            
                           }
