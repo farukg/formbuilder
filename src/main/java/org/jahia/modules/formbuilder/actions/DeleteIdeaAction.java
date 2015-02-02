@@ -84,9 +84,16 @@ public class DeleteIdeaAction extends Action {
                       JCRPropertyWrapper challenges = nodeSession.getProperty("challenges");
                       for (JCRValueWrapper challenge: challenges.getRealValues()) {
                         System.out.println("Challengename:" + challenge.getNode().getProperty("j:nodename"));   
-                        if (challenge.getNode().hasNode("ideas")) {
+                        System.out.println("hasProperty:" + challenge.getNode().hasProperty("ideas"));
+                        System.out.println("Properties:" + challenge.getNode().getPropertiesAsString());
+                        
+                        if (challenge.getNode().hasProperty("ideas")) {
                           
-                          System.out.println("Ideas before:" + challenge.getNode().getProperty("ideas").getRealValues());
+                          System.out.println("Ideas before:");
+                          for (JCRValueWrapper tmp : challenge.getNode().getProperty("ideas").getRealValues()){
+                            System.out.println("Idea:" + tmp.getNode().getProperty("j:nodename"));
+                          }
+                          
                           String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getRealValues().length];
                           int i=0;
                           
@@ -96,7 +103,10 @@ public class DeleteIdeaAction extends Action {
                               i++;
                             }                            
                           }
-                          System.out.println("Ideas after:" + newIdeas);
+                          System.out.println("Ideas after:");
+                          for (String tmp : newIdeas) {
+                           	System.out.println("Idea:" + tmp); 
+                          }
                         }
                           
                         		
