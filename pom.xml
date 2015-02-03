@@ -124,7 +124,7 @@
         <configuration>
           <instructions>
             <Export-Package>org.jahia.modules.formbuilder.taglib</Export-Package>
-            <Jahia-Depends>default,grid</Jahia-Depends>
+            <Jahia-Depends>default,bootstrap,bootstrap-components,grid</Jahia-Depends>
           </instructions>
         </configuration>
       </plugin>

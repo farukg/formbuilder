@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 public class CreateChallengeAction extends Action {
 
@@ -65,8 +66,11 @@ public class CreateChallengeAction extends Action {
                 }
                   
 				JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaChallenge", null, null, renderContext.getUser().getUsername() , null, null);
-
-				jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
+             	
+              	List<String> roles = Arrays.asList("owner");
+                jcrNodeWrapper.grantRoles("u:" + renderContext.getUser().getUsername(), new HashSet<String>(roles));
+				
+              	jcrNodeWrapper.setProperty("jcr:title", listTitle.get(0));      
 				jcrNodeWrapper.setProperty("body", listDescr.get(0));
 
 				if(listVisibil.get(0).equals("private")){
@@ -75,6 +79,7 @@ public class CreateChallengeAction extends Action {
 
 					JCRNodeWrapper nodeSessionGroup = session.getNode("/sites/electrodea/contents/groups");
 					JCRNodeWrapper jcrNodeWrapperGroup = nodeSessionGroup.addNode(listTitle.get(0),"sysewl:electrodeaGroup");
+                	jcrNodeWrapperGroup.grantRoles("u:" + renderContext.getUser().getUsername(), new HashSet<String>(roles));
 
 					if (listVisibilBox != null) {
 						String[] nodeList = new String[listVisibilBox.size()];

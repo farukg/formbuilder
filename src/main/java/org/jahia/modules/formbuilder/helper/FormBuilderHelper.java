@@ -289,7 +289,7 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         case(MODIFY_CHALLENGE):
         	if (challengesNode.hasNode(challengeTitle)) {
           	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-              if (challenge.getProperty("j:createdBy").equals(renderContext.getUser().getUsername())) {
+              if (challenge.getProperty("jcr:createdBy").equals(renderContext.getUser().getUsername())) {
                 return RET_SUCCESS;
               } else {
                 return RET_NOT_OWNER;
@@ -301,7 +301,7 @@ public static int checkWritingRights(JCRSessionWrapper session, RenderContext re
         case(DELETE_CHALLENGE):
         	if (challengesNode.hasNode(challengeTitle)) {
           	  JCRNodeWrapper challenge = challengesNode.getNode(challengeTitle);
-              if (challenge.getProperty("j:createdBy").equals(renderContext.getUser().getUsername())) {
+              if (challenge.getProperty("jcr:createdBy").equals(renderContext.getUser().getUsername())) {
                 return RET_SUCCESS;
               } else {
                 return RET_NOT_OWNER;

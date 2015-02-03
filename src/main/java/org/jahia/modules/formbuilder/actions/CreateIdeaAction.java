@@ -1,5 +1,6 @@
 package org.jahia.modules.formbuilder.actions;
 
+import org.jahia.api.Constants;
 import org.jahia.bin.Action;
 import org.jahia.bin.ActionResult;
 import org.jahia.bin.Render;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 public class CreateIdeaAction extends Action {
 
@@ -72,7 +74,9 @@ public class CreateIdeaAction extends Action {
 				JCRNodeWrapper challengeNode = session.getNode("/sites/electrodea/contents/challenges/" + listChallenge.get(0));      
 				JCRNodeWrapper nodeSession = session.getNode("/sites/electrodea/contents/ideas");
 				JCRNodeWrapper ideaNode = nodeSession.addNode(listTitle.get(0), "sysewl:electrodeaIdea", null, null, renderContext.getUser().getUsername() , null, null);
-
+	
+                List<String> roles = Arrays.asList("owner");
+                ideaNode.grantRoles("u:" + renderContext.getUser().getUsername(), new HashSet<String>(roles));
 				//image alt
 				//InputStream stream = new ByteArrayInputStream(listImage.get(0).getBytes("UTF-8"));
 				//JCRNodeWrapper imageWrapper;

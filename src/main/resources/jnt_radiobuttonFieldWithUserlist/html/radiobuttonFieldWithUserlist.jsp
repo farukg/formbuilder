@@ -16,6 +16,9 @@
 
 <template:addResources type="javascript" resources="jquery.min.js"/>
 <template:addResources type="javascript" resources="jquery.filtertable.js" />
+<template:addResources type="javascript" resources="bootstrap-modal.js" />
+
+
 
 <script type='text/javascript'>
   //$(document).ready($('#table').filterTable());
@@ -71,52 +74,56 @@
 	<a href="#myModal" style="display: none;" id="btnuserlist" role="button" class="btn" data-toggle="modal">Choose Users</a>
   
     <!-- Modal -->
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        <h3 id="myModalLabel">Userlist</h3>
-      </div>
-      <div class="modal-body">
-        
-        <!--<form class="navbar-search pull-left">
-          <input type="text" id="searchUsers" class="search-query" placeholder="Search">
-        </form>-->
-        <table id="table1" class="table table-condensed">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            <c:forEach items="${listQuerySql.nodes}" var="user">
-              <c:if test="${jcr:isNodeType(user, 'jnt:user')}">
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="myModalLabel">Userlist</h3>
+          </div>
+          <div class="modal-body">
+            
+            <!--<form class="navbar-search pull-left">
+              <input type="text" id="searchUsers" class="search-query" placeholder="Search">
+            </form>-->
+            <table id="table1" class="table table-condensed">
+              <thead>
                 <tr>
-                  <td>
-                    <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
-                      <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
-                  </td>
-                  <td>
-                    <label>${user.properties['j:firstName'].string}</label> 
-                  </td>
-                  <td>
-                    <label>${user.properties['j:lastName'].string}</label> 
-                  </td>
+                  <th scope="col">#</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
                 </tr>
-              </c:if>
-            </c:forEach>
-          </tbody>  
-        </table>
-        <script>
-          $(document).ready(function() {
-              $('table').filterTable(); // apply filterTable to all tables on this page
-          });
-        </script> 
-        
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary"  data-dismiss="modal" >Save</button>
+              </thead>
+              <tbody>
+                <c:forEach items="${listQuerySql.nodes}" var="user">
+                  <c:if test="${jcr:isNodeType(user, 'jnt:user')}">
+                    <tr>
+                      <td>
+                        <input ${disabled} type="checkbox" ${required} class="${required}" name="${currentNode.name}box" id="${currentNode.name}box" value="${user.path}" <c:if test="${isChecked eq 'true'}">checked="true"</c:if>
+                          <c:if test="${required eq 'required'}">onclick='$("input:checkbox[name=${currentNode.name}box]:checked").size()==0?$("input:checkbox[name=${currentNode.name}box]").prop("required", true):$("input:checkbox[name=${currentNode.name}box]").removeAttr("required")'</c:if> />
+                      </td>
+                      <td>
+                        <label>${user.properties['j:firstName'].string}</label> 
+                      </td>
+                      <td>
+                        <label>${user.properties['j:lastName'].string}</label> 
+                      </td>
+                    </tr>
+                  </c:if>
+                </c:forEach>
+              </tbody>  
+            </table>
+            <script>
+              $(document).ready(function() {
+                  $('table').filterTable(); // apply filterTable to all tables on this page
+              });
+            </script> 
+            
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary"  data-dismiss="modal" >Save</button>
+          </div>
+        </div>
       </div>
     </div>
   

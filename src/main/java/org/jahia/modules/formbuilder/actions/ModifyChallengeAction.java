@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.jahia.modules.formbuilder.helper.FormBuilderHelper;
 
 import org.jahia.services.content.JCRCallback;
@@ -40,17 +43,20 @@ public ActionResult doExecute(HttpServletRequest req, RenderContext renderContex
 return (ActionResult) jcrTemplate.doExecuteWithSystemSession(null,session.getWorkspace().getName(),session.getLocale(),new JCRCallback<Object>() {
 public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
 
-  /**JCRNodeWrapper node = resource.getNode();
-  
-      if (!node.isNodeType("sysewl:electrodeaChallenge"))
-          return new ActionResult(500, targetPath);
+  		//get challenge that should be modified
+  		//for testing
+  		List<String> challengePath = parameters.get("challenge-to-modify");
+  		JCRNodeWrapper challenge = session.getNode(challengePath.get(0));	
+  		//JCRNodeWrapper challenge = resource.getNode(); 
+     	if (!challenge.isNodeType("sysewl:electrodeaChallenge"))
+       		return new ActionResult(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           
-	  	List<String> list = parameters.get("title");
-    	List<String> list2 = parameters.get("description");
-     	//List<String> list3 = parameters.get("youlink");
-     	// List<String> list4 = parameters.get("sysEWLOURname");
-        
-        try {
+  		//read parameters from form (title must not be changed!) 
+    	List<String> listDesc = parameters.get("describe-your-challenge");
+  		List<String> listCompl = parameters.get("status"); 
+		List<String> listVisibil = parameters.get("visibility");
+          
+        /**try {
             if (FormBuilderHelper.checkWritingRights(session, renderContext, list.get(0), "", FormBuilderHelper.MODIFY_CHALLENGE) != FormBuilderHelper.RET_SUCCESS) {
             	//In this case the user has not the right to modify the challenge
         		String errorPath = "/sites/electrodea/error";
@@ -61,28 +67,29 @@ public Object doInJCR(JCRSessionWrapper session) throws RepositoryException {
                     String errorPath = "/sites/electrodea/error";
                   	parameters.remove(Render.REDIRECT_TO);
                   	return new ActionResult(HttpServletResponse.SC_OK, errorPath); //TODO redirect to a path with a more convinient error message, since the return code indiactes what went wrong  
-                }
-         
-        JCRNodeWrapper nodeSessionTitle = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/title");
-        //JCRNodeWrapper jcrNodeWrapper = nodeSession.addNode("Titel des Formulares", "jnt:inputText");
-		JCRNodeWrapper nodeSessionDescription = session.getNode("/sites/mySite/testmodify/pagecontent/modify-challenge/fieldsets/title/description");	
-      
-		nodeSessionTitle.setProperty("defaultValue", list.get(0));
-      	nodeSessionDescription.setProperty("defaultValue", list2.get(0));
-      	//list = parameters.get("SYSEWLOurdescription");
-       	//jcrNodeWrapper.setProperty("body", list2.get(0));
-     	//list = parameters.get("youlink");a
-      	//jcrNodeWrapper.setProperty("video",list3.get(0));
-     	 
+                }**/
+       
+        		
+        //put parameter values into content object
+		challenge.setProperty("body",listDesc.get(0));  
+  		if(listVisibil.get(0).equals("private")){
+			challenge.setProperty("private",true);
+    	}
+ 		 else {
+    		challenge.setProperty("private",false);
+ 		}
+  		if(listCompl.get(0).equals("completed")){
+					challenge.setProperty("completed", true);
+				}else{
+					challenge.setProperty("completed", false);
+				}
+             	 
        	
         session.save();
-        //return null;
-  		//String targetPath = "/sites/mySite/testmodify";
-       parameters.remove(Render.REDIRECT_TO);
-      **/
-      
-       
-        return new ActionResult(HttpServletResponse.SC_OK);
+  		
+  		String targetPath = challenge.getPath();
+        parameters.remove(Render.REDIRECT_TO); 
+        return new ActionResult(HttpServletResponse.SC_OK, targetPath);
   
 		}
 	});

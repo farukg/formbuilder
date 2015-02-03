@@ -13,6 +13,7 @@ import org.jahia.services.render.RenderContext;
 import org.jahia.services.render.Resource;
 import org.jahia.services.render.URLResolver;
 
+import javax.jcr.PropertyType;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletRequest;
@@ -91,14 +92,15 @@ public class DeleteIdeaAction extends Action {
                           
                           System.out.println("Ideas before:");
                           for (JCRValueWrapper tmp : challenge.getNode().getProperty("ideas").getRealValues()){
-                            System.out.println("Idea:" + tmp.getNode().getProperty("j:nodename"));
+                            System.out.println("Idea:" + tmp.getNode().getProperty("j:nodename").getRealValue().getString());
+                            System.out.println("IdeaProperties:" + tmp.getNode().getPropertiesAsString());
                           }
                           
-                          String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getRealValues().length];
+                          String[] newIdeas = new String[challenge.getNode().getProperty("ideas").getRealValues().length - 1];
                           int i=0;
                           
                           for (JCRValueWrapper idea: challenge.getNode().getProperty("ideas").getRealValues()) {
-                            if (!idea.getNode().getProperty("j:nodename").equals(listChTitle.get(0))) {
+                            if (!idea.getNode().getProperty("j:nodename").getRealValue().getString().equals(listChTitle.get(0))) {
                               newIdeas[i]=idea.getNode().getUUID();
                               i++;
                             }                            
@@ -107,14 +109,17 @@ public class DeleteIdeaAction extends Action {
                           for (String tmp : newIdeas) {
                            	System.out.println("Idea:" + tmp); 
                           }
+                          
+                          challenge.getNode().setProperty("ideas", newIdeas, PropertyType.WEAKREFERENCE);
                         }
+                        
                           
                         		
                         }
                     }
                   
-					//nodeSession.remove();
-					//session.save();
+					nodeSession.remove();
+					session.save();
                 
 
 					String targetPath = "/sites/electrodea/home/challenges";
